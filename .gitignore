@@ -1,0 +1,8 @@
+/.tmp
+/coverage
+/dist
+/node_modules
+/temp
+.idea/*
+.vscode/*
+yarn-error.log

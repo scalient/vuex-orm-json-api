@@ -1,0 +1,46 @@
+{
+  "name": "vuex-orm-json-api",
+  "version": "0.9.0",
+  "description": "A JSON:API adapter for Vuex ORM.",
+  "module": "src/index.js",
+  "scripts": {
+    "watch": "webpack --watch --mode=production",
+    "build": "webpack --mode=production",
+    "lint": "eslint -- \"{src,test}/**/*.js\"",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scalient/vuex-orm-json-api.git"
+  },
+  "keywords": [
+    "vue",
+    "vuex",
+    "vuex-plugin",
+    "vuex-orm",
+    "vuex-orm-plugin",
+    "axios",
+    "json-api"
+  ],
+  "author": "Roy Liu",
+  "license": "Apache-2.0",
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
+  },
+  "peerDependencies": {
+    "@vuex-orm/core": ">=0.36.0"
+  },
+  "dependencies": {
+    "@vuex-orm/plugin-axios": "^0.9.3",
+    "axios": "^0.19.2"
+  },
+  "devDependencies": {
+    "@vuex-orm/core": ">=0.36.0",
+    "axios-mock-adapter": "^1.18.1",
+    "eslint": "^7.0.0",
+    "jest": "25.5.4",
+    "webpack": "^4.43.0"
+  }
+}

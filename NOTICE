@@ -1,0 +1,4 @@
+vuex-orm-json-api
+Copyright 2020 Roy Liu
+
+... with components from the plugin-axios project (see `licenses/plugin-axios.txt`).

@@ -7,14 +7,6 @@ export default class {
   }
 
   install() {
-    if (!this.modelComponent.api ||
-      !this.modelComponent.apiConfig ||
-      !this.modelComponent.globalApiConfig ||
-      !this.modelComponent.setAxios) {
-      throw ("It looks like `VuexORMAxios` wasn't installed. Have you considered running " +
-        "`VuexORM.use(VuexORMAxios, { axios })`?");
-    }
-
     ModelMixin.include(this.modelComponent, this.config);
   }
 }

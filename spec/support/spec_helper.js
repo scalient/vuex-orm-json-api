@@ -2,7 +2,6 @@ import axios from "axios";
 import Vue from "vue";
 import Vuex, {Store} from "vuex";
 import VuexORM, {Database} from "@vuex-orm/core";
-import VuexORMAxios from "@vuex-orm/plugin-axios";
 import VuexOrmJsonApi from "@/index";
 
 import {expect} from "@jest/globals";
@@ -10,8 +9,7 @@ import {expect} from "@jest/globals";
 Vue.use(Vuex);
 
 export function createStore(models) {
-  VuexORM.use(VuexORMAxios, {axios});
-  VuexORM.use(VuexOrmJsonApi);
+  VuexORM.use(VuexOrmJsonApi, {axios});
 
   const database = new Database();
 

@@ -1,13 +1,15 @@
-import VuexORM from "@vuex-orm/core";
-import VuexOrmJsonApi from "@/index";
+import {createStore} from "spec/support/spec_helper";
+import User from "spec/models/user";
 
 import {describe, expect, it} from "@jest/globals";
 
 describe("Feature - Vuex ORM JSON:API", () => {
-  it("throws an error when VuexORMAxios isn't installed", () => {
-    expect(() => VuexORM.use(VuexOrmJsonApi)). //
-      toThrowError("It looks like `VuexORMAxios` wasn't installed. Have you considered running " +
-        "`VuexORM.use(VuexORMAxios, { axios })`?"
-      );
+  it("mixes the adapter's configuration into models", () => {
+    createStore([User]);
+
+    expect(User).toHaveProperty("setAxios");
+    expect(User).toHaveProperty("globalJsonApiConfig");
+    expect(User).toHaveProperty("jsonApiConfig");
+    expect(User).toHaveProperty("jsonApi");
   });
 });

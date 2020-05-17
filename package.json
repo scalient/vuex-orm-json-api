@@ -33,12 +33,12 @@
     "@vuex-orm/core": ">=0.36.0"
   },
   "dependencies": {
-    "@vuex-orm/plugin-axios": "^0.9.3",
     "axios": "^0.19.2"
   },
   "devDependencies": {
     "@vuex-orm/core": ">=0.36.0",
     "axios-mock-adapter": "^1.18.1",
+    "babel-eslint": "^10.1.0",
     "eslint": "^7.0.0",
     "jest": "25.5.4",
     "webpack": "^4.43.0"

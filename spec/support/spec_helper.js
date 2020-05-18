@@ -2,14 +2,13 @@ import axios from "axios";
 import Vue from "vue";
 import Vuex, {Store} from "vuex";
 import VuexORM, {Database} from "@vuex-orm/core";
-import VuexOrmJsonApi from "@/index";
-
+import VuexOrmJsonApi, {RestfulActionsMixin} from "@/index";
 import {expect} from "@jest/globals";
 
 Vue.use(Vuex);
 
 export function createStore(models) {
-  VuexORM.use(VuexOrmJsonApi, {axios});
+  VuexORM.use(VuexOrmJsonApi, {axios, mixins: [RestfulActionsMixin]});
 
   const database = new Database();
 

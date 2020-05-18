@@ -6,6 +6,14 @@ module.exports = {
       {
         loose: true
       }
+    ],
+    [
+      require("@babel/plugin-transform-runtime").default,
+      {
+        helpers: false,
+        regenerator: true,
+        corejs: false
+      }
     ]
   ]
 };

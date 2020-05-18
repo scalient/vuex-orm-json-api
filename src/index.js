@@ -5,3 +5,5 @@ export default class {
     (new VuexOrmJsonApi(components, config)).install();
   }
 }
+
+export {default as RestfulActionsMixin} from "./mixins/RestfulActionsMixin";

@@ -4,15 +4,18 @@ import Vuex, {Store} from "vuex";
 import VuexORM, {Database} from "@vuex-orm/core";
 import VuexOrmJsonApi, {RestfulActionsMixin} from "@/index";
 import {expect} from "@jest/globals";
+import ModelFactory from "../models/ModelFactory";
 
 Vue.use(Vuex);
 
-export function createStore(models) {
-  VuexORM.use(VuexOrmJsonApi, {axios, mixins: [RestfulActionsMixin]});
+VuexORM.use(VuexOrmJsonApi, {axios, mixins: [RestfulActionsMixin]});
+
+export function createStore(...modelNames) {
+  const entitiesToModels = ModelFactory.create(...modelNames);
 
   const database = new Database();
 
-  models.forEach((model) => database.register(model));
+  Object.entries(entitiesToModels).forEach(([entity, model]) => database.register(model));
 
   return new Store({
     plugins: [VuexORM.install(database)],

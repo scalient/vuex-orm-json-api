@@ -2,6 +2,7 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import {describe, it, beforeEach, afterEach} from "@jest/globals";
 import {createStore, assertState} from "spec/support/spec_helper";
+import ModelFactory from "../models/ModelFactory";
 
 describe("Feature - Relation Transformers", () => {
   let mock;
@@ -15,7 +16,7 @@ describe("Feature - Relation Transformers", () => {
   });
 
   it("transforms the `BelongsTo` relation", async () => {
-    const store = createStore("users", "groups", "users_groups");
+    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
     const {users_groups: UsersGroup} = store.$db().models();
 
     mock.onGet("/api/users_groups/1").reply(200, {
@@ -42,19 +43,20 @@ describe("Feature - Relation Transformers", () => {
     // This is also testing that the explicit `id` mandated by JSON:API can coexist with the true, composite key `$id`.
     assertState(store, {
       users: {
-        1: {$id: "1", id: 1, name: "Harry Bovik", users_groups: [], groups: []}
+        1: {$id: "1", id: 1, name: "Harry Bovik", users_groups: [], groups: [], user_profile: null}
       },
       groups: {
         1: {$id: "1", id: 1, name: "CMU", users_groups: [], users: []}
       },
       users_groups: {
         "[1,1]": {$id: "[1,1]", id: 1, user_id: 1, user: null, group_id: 1, group: null}
-      }
+      },
+      user_profiles: {}
     });
   });
 
   it("transforms the `BelongsToMany` relation", async () => {
-    const store = createStore("users", "groups", "users_groups");
+    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
     mock.onGet("/api/users/1").reply(200, {
@@ -85,7 +87,7 @@ describe("Feature - Relation Transformers", () => {
 
     assertState(store, {
       users: {
-        1: {$id: "1", id: 1, name: "Harry Bovik", users_groups: [], groups: []}
+        1: {$id: "1", id: 1, name: "Harry Bovik", users_groups: [], groups: [], user_profile: null}
       },
       groups: {
         1: {$id: "1", id: 1, name: "A", users_groups: [], users: []},
@@ -96,7 +98,47 @@ describe("Feature - Relation Transformers", () => {
         "[1,1]": {$id: "[1,1]", id: null, user_id: 1, user: null, group_id: 1, group: null},
         "[1,2]": {$id: "[1,2]", id: null, user_id: 1, user: null, group_id: 2, group: null},
         "[1,3]": {$id: "[1,3]", id: null, user_id: 1, user: null, group_id: 3, group: null}
-      }
+      },
+      user_profiles: {}
+    });
+  });
+
+  it("transforms the `HasOne` relation", async () => {
+    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const {users: User} = store.$db().models();
+
+    mock.onGet("/api/users/1").reply(200, {
+      data: {
+        id: 1,
+        type: "users",
+        attributes: {
+          name: "Harry Bovik"
+        },
+        relationships: {
+          "user-profile": {
+            data: {
+              id: 1,
+              type: "user-profiles"
+            }
+          }
+        }
+      },
+      included: [
+        {id: 1, type: "user-profiles"}
+      ]
+    });
+
+    await User.jsonApi().show(1);
+
+    assertState(store, {
+      users: {
+        1: {$id: "1", id: 1, name: "Harry Bovik", users_groups: [], groups: [], user_profile: null}
+      },
+      user_profiles: {
+        1: {$id: "1", id: 1, user_id: 1, user: null}
+      },
+      groups: {},
+      users_groups: {}
     });
   });
 });

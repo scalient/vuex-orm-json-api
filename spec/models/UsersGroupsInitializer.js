@@ -2,6 +2,8 @@ export default class {
   static initialize({users_groups, users, groups}) {
     users_groups.entity = "users_groups";
 
+    users_groups.primaryKey = ["user_id", "group_id"];
+
     users_groups.fields = function () {
       return {
         id: this.attr(null),

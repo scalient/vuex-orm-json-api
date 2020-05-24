@@ -1,5 +1,5 @@
 export default class {
-  static initialize({users, users_groups, groups, user_profiles}) {
+  static initialize({users, users_groups, groups, user_profiles, user_profile_attributes}) {
     users.entity = "users";
 
     users.fields = function () {
@@ -11,7 +11,11 @@ export default class {
 
         groups: this.belongsToMany(groups, users_groups, "user_id", "group_id"),
 
-        user_profile: this.hasOne(user_profiles, "user_id")
+        user_profile: this.hasOne(user_profiles, "user_id"),
+
+        user_profile_attributes: this.hasManyThrough(
+          user_profile_attributes, user_profiles, "user_id", "user_profile_id"
+        )
       };
     };
   }

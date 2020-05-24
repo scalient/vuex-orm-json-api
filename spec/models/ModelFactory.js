@@ -3,6 +3,7 @@ import groups_initializer from "./GroupsInitializer";
 import users_initializer from "./UsersInitializer";
 import users_groups_initializer from "./UsersGroupsInitializer";
 import user_profiles_initializer from "./UserProfilesInitializer";
+import user_profile_attributes_initializer from "./UserProfileAttributesInitializer";
 import people_initializer from "./PeopleInitializer";
 import inhabitables_initializer from "./InhabitablesInitializer";
 import houses_initializer from "./HousesInitializer";
@@ -17,6 +18,7 @@ export default class {
     users_initializer,
     users_groups_initializer,
     user_profiles_initializer,
+    user_profile_attributes_initializer,
     people_initializer,
     inhabitables_initializer,
     houses_initializer,
@@ -27,8 +29,8 @@ export default class {
   }
 
   static presetClusters = {
-    // Used to test the `BelongsTo`, `HasMany`, `BelongsToMany`, and `HasOne` relations.
-    usersAndGroups: ["users", "groups", "users_groups", "user_profiles"],
+    // Used to test the `BelongsTo`, `HasMany`, `BelongsToMany`, `HasOne`, and `HasManyThrough` relations.
+    usersAndGroups: ["users", "groups", "users_groups", "user_profiles", "user_profile_attributes"],
     // Used to test the `MorphToMany` and `MorphedByMany` relations.
     peopleAndInhabitables: ["people", "inhabitables", "houses", "offices"],
     // Used to test the `MorphTo`, `MorphMany`, and `MorphOne` relations.

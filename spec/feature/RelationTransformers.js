@@ -1,8 +1,9 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import {describe, it, beforeEach, afterEach} from "@jest/globals";
+import {describe, it, beforeEach, afterEach, expect} from "@jest/globals";
 import {createStore, assertState} from "spec/support/spec_helper";
 import ModelFactory from "../models/ModelFactory";
+import Utils from "../../src/Utils";
 
 describe("Feature - Relation Transformers", () => {
   let mock;
@@ -43,7 +44,15 @@ describe("Feature - Relation Transformers", () => {
     // This is also testing that the explicit `id` mandated by JSON:API can coexist with the true, composite key `$id`.
     assertState(store, {
       users: {
-        1: {$id: "1", id: 1, name: "Harry Bovik", users_groups: [], groups: [], user_profile: null}
+        1: {
+          $id: "1",
+          id: 1,
+          name: "Harry Bovik",
+          users_groups: [],
+          groups: [],
+          user_profile: null,
+          user_profile_attributes: []
+        }
       },
       groups: {
         1: {$id: "1", id: 1, name: "CMU", users_groups: [], users: []}
@@ -51,7 +60,8 @@ describe("Feature - Relation Transformers", () => {
       users_groups: {
         "[1,1]": {$id: "[1,1]", id: 1, user_id: 1, user: null, group_id: 1, group: null}
       },
-      user_profiles: {}
+      user_profiles: {},
+      user_profile_attributes: {}
     });
   });
 
@@ -94,7 +104,15 @@ describe("Feature - Relation Transformers", () => {
     // attributes, thus ensuring that the `["user_id", "group_id"]` primary key can be generated.
     assertState(store, {
       users: {
-        1: {$id: "1", id: 1, name: "Harry Bovik", users_groups: [], groups: [], user_profile: null}
+        1: {
+          $id: "1",
+          id: 1,
+          name: "Harry Bovik",
+          users_groups: [],
+          groups: [],
+          user_profile: null,
+          user_profile_attributes: []
+        }
       },
       groups: {
         1: {$id: "1", id: 1, name: "CMU", users_groups: [], users: []}
@@ -102,7 +120,8 @@ describe("Feature - Relation Transformers", () => {
       users_groups: {
         "[1,1]": {$id: "[1,1]", id: 1, user_id: 1, user: null, group_id: 1, group: null}
       },
-      user_profiles: {}
+      user_profiles: {},
+      user_profile_attributes: {}
     });
   });
 
@@ -138,7 +157,15 @@ describe("Feature - Relation Transformers", () => {
 
     assertState(store, {
       users: {
-        1: {$id: "1", id: 1, name: "Harry Bovik", users_groups: [], groups: [], user_profile: null}
+        1: {
+          $id: "1",
+          id: 1,
+          name: "Harry Bovik",
+          users_groups: [],
+          groups: [],
+          user_profile: null,
+          user_profile_attributes: []
+        }
       },
       groups: {
         1: {$id: "1", id: 1, name: "A", users_groups: [], users: []},
@@ -150,7 +177,8 @@ describe("Feature - Relation Transformers", () => {
         "[1,2]": {$id: "[1,2]", id: null, user_id: 1, user: null, group_id: 2, group: null},
         "[1,3]": {$id: "[1,3]", id: null, user_id: 1, user: null, group_id: 3, group: null}
       },
-      user_profiles: {}
+      user_profiles: {},
+      user_profile_attributes: {}
     });
   });
 
@@ -183,14 +211,55 @@ describe("Feature - Relation Transformers", () => {
 
     assertState(store, {
       users: {
-        1: {$id: "1", id: 1, name: "Harry Bovik", users_groups: [], groups: [], user_profile: null}
+        1: {
+          $id: "1",
+          id: 1,
+          name: "Harry Bovik",
+          users_groups: [],
+          groups: [],
+          user_profile: null,
+          user_profile_attributes: []
+        }
       },
       user_profiles: {
         1: {$id: "1", id: 1, user_id: 1, user: null}
       },
       groups: {},
-      users_groups: {}
+      users_groups: {},
+      user_profile_attributes: {}
     });
+  });
+
+  it("refuses to transform the `HasManyThrough` relation", async () => {
+    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const {users: User} = store.$db().models();
+
+    mock.onGet("/api/users/1").reply(200, {
+      data: {
+        id: 1,
+        type: "users",
+        attributes: {
+          name: "Harry Bovik"
+        },
+        relationships: {
+          "user-profile-attributes": {
+            data: [
+              {
+                id: 1,
+                type: "user-profile-attributes"
+              }
+            ]
+          }
+        }
+      },
+      included: [
+        {id: 1, type: "user-profile-attributes"}
+      ]
+    });
+
+    await expect(User.jsonApi().show(1)).rejects.toThrow(
+      Utils.error("Writing directly to a `HasManyThrough` relation is not supported")
+    );
   });
 
   it("transforms the `morphToMany` relation", async () => {

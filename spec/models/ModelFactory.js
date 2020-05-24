@@ -7,6 +7,9 @@ import people_initializer from "./PeopleInitializer";
 import inhabitables_initializer from "./InhabitablesInitializer";
 import houses_initializer from "./HousesInitializer";
 import offices_initializer from "./OfficesInitializer";
+import children_initializer from "./ChildrenInitializer";
+import toys_initializer from "./ToysInitializer";
+import monsters_initializer from "./MonstersInitializer";
 
 export default class {
   static initializers = {
@@ -17,12 +20,19 @@ export default class {
     people_initializer,
     inhabitables_initializer,
     houses_initializer,
-    offices_initializer
+    offices_initializer,
+    children_initializer,
+    toys_initializer,
+    monsters_initializer
   }
 
   static presetClusters = {
+    // Used to test the `BelongsTo`, `BelongsToMany`, and `HasOne` relations.
     usersAndGroups: ["users", "groups", "users_groups", "user_profiles"],
-    peopleAndInhabitables: ["people", "inhabitables", "houses", "offices"]
+    // Used to test the `MorphToMany` and `MorphedByMany` relations.
+    peopleAndInhabitables: ["people", "inhabitables", "houses", "offices"],
+    // Used to test the `MorphTo`, `MorphMany`, and `MorphOne` relations.
+    childrenAndToysAndMonsters: ["children", "toys", "monsters"]
   }
 
   static create(...entities) {

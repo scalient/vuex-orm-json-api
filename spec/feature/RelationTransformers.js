@@ -306,4 +306,117 @@ describe("Feature - Relation Transformers", () => {
       }
     });
   });
+
+  it("transforms the `morphTo` relation", async () => {
+    const store = createStore(...ModelFactory.presetClusters.childrenAndToysAndMonsters);
+    const {toys: Toy} = store.$db().models();
+
+    mock.onGet("/api/toys/1").reply(200, {
+      data: {
+        id: 1,
+        type: "toys",
+        attributes: {
+          name: "Sheriff Woody"
+        },
+        relationships: {
+          owner: {
+            data: {id: 1, type: "children"}
+          }
+        }
+      },
+      included: [
+        {id: 1, type: "children", attributes: {name: "Andy"}}
+      ]
+    });
+
+    await Toy.jsonApi().show(1);
+
+    assertState(store, {
+      toys: {
+        1: {$id: "1", id: 1, owner_id: 1, owner_type: "children", name: "Sheriff Woody", owner: null}
+      },
+      children: {
+        "1": {$id: "1", id: 1, name: "Andy", toys: [], monster_in_the_closet: null}
+      },
+      monsters: {}
+    });
+  });
+
+  it("transforms the `morphMany` relation", async () => {
+    const store = createStore(...ModelFactory.presetClusters.childrenAndToysAndMonsters);
+    const {children: Child} = store.$db().models();
+
+    mock.onGet("/api/children/1").reply(200, {
+      data: {
+        id: 1,
+        type: "children",
+        attributes: {
+          name: "Andy"
+        },
+        relationships: {
+          toys: {
+            data: [
+              {id: 1, type: "toys"},
+              {id: 2, type: "toys"},
+              {id: 3, type: "toys"}
+            ]
+          }
+        }
+      },
+      included: [
+        {id: 1, type: "toys", attributes: {name: "Sheriff Woody"}},
+        {id: 2, type: "toys", attributes: {name: "Buzz Lightyear"}},
+        {id: 3, type: "toys", attributes: {name: "Bo Peep"}}
+      ]
+    });
+
+    await Child.jsonApi().show(1);
+
+    assertState(store, {
+      children: {
+        "1": {$id: "1", id: 1, name: "Andy", toys: [], monster_in_the_closet: null}
+      },
+      toys: {
+        1: {$id: "1", id: 1, owner_id: 1, owner_type: "children", name: "Sheriff Woody", owner: null},
+        2: {$id: "2", id: 2, owner_id: 1, owner_type: "children", name: "Buzz Lightyear", owner: null},
+        3: {$id: "3", id: 3, owner_id: 1, owner_type: "children", name: "Bo Peep", owner: null}
+      },
+      monsters: {}
+    });
+  });
+
+  it("transforms the `morphOne` relation", async () => {
+    const store = createStore(...ModelFactory.presetClusters.childrenAndToysAndMonsters);
+    const {children: Child} = store.$db().models();
+
+    mock.onGet("/api/children/1").reply(200, {
+      data: {
+        id: 1,
+        type: "children",
+        attributes: {
+          name: "Boo"
+        },
+        relationships: {
+          "monster-in-the-closet": {
+            data: {id: 1, type: "monsters"}
+          }
+        }
+      },
+      included: [
+        {id: 1, type: "monsters", attributes: {name: "Sully"}}
+      ]
+    });
+
+    await Child.jsonApi().show(1);
+
+    assertState(store, {
+      children: {
+        "1": {$id: "1", id: 1, name: "Boo", toys: [], monster_in_the_closet: null}
+      },
+      monsters: {
+        1: {$id: "1", id: 1, scaree_id: 1, scaree_type: "children", name: "Sully", scaree: null}
+      },
+      toys: {}
+    });
+  });
 });

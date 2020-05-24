@@ -15,7 +15,11 @@ export default class {
 
         user_profile_attributes: this.hasManyThrough(
           user_profile_attributes, user_profiles, "user_id", "user_profile_id"
-        )
+        ),
+
+        embedded_group_ids: this.attr(null),
+
+        embedded_groups: this.hasManyBy(groups, "embedded_group_ids")
       };
     };
   }

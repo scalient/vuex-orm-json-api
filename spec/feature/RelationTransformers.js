@@ -51,7 +51,9 @@ describe("Feature - Relation Transformers", () => {
           users_groups: [],
           groups: [],
           user_profile: null,
-          user_profile_attributes: []
+          user_profile_attributes: [],
+          embedded_group_ids: null,
+          embedded_groups: []
         }
       },
       groups: {
@@ -111,7 +113,9 @@ describe("Feature - Relation Transformers", () => {
           users_groups: [],
           groups: [],
           user_profile: null,
-          user_profile_attributes: []
+          user_profile_attributes: [],
+          embedded_group_ids: null,
+          embedded_groups: []
         }
       },
       groups: {
@@ -120,6 +124,61 @@ describe("Feature - Relation Transformers", () => {
       users_groups: {
         "[1,1]": {$id: "[1,1]", id: 1, user_id: 1, user: null, group_id: 1, group: null}
       },
+      user_profiles: {},
+      user_profile_attributes: {}
+    });
+  });
+
+  it("transforms the `HasManyBy` relation", async () => {
+    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const {users: User} = store.$db().models();
+
+    mock.onGet("/api/users/1").reply(200, {
+      data: {
+        id: 1,
+        type: "users",
+        attributes: {
+          name: "Harry Bovik"
+        },
+        relationships: {
+          embedded_groups: {
+            data: [
+              {id: 1, type: "groups"},
+              {id: 2, type: "groups"},
+              {id: 3, type: "groups"}
+            ]
+          }
+        }
+      },
+      included: [
+        {id: 1, type: "groups", attributes: {name: "A"}},
+        {id: 2, type: "groups", attributes: {name: "B"}},
+        {id: 3, type: "groups", attributes: {name: "C"}}
+      ]
+    });
+
+    await User.jsonApi().show(1);
+
+    assertState(store, {
+      users: {
+        1: {
+          $id: "1",
+          id: 1,
+          name: "Harry Bovik",
+          users_groups: [],
+          groups: [],
+          user_profile: null,
+          user_profile_attributes: [],
+          embedded_group_ids: [1, 2, 3],
+          embedded_groups: []
+        }
+      },
+      groups: {
+        1: {$id: "1", id: 1, name: "A", users_groups: [], users: []},
+        2: {$id: "2", id: 2, name: "B", users_groups: [], users: []},
+        3: {$id: "3", id: 3, name: "C", users_groups: [], users: []}
+      },
+      users_groups: {},
       user_profiles: {},
       user_profile_attributes: {}
     });
@@ -164,7 +223,9 @@ describe("Feature - Relation Transformers", () => {
           users_groups: [],
           groups: [],
           user_profile: null,
-          user_profile_attributes: []
+          user_profile_attributes: [],
+          embedded_group_ids: null,
+          embedded_groups: []
         }
       },
       groups: {
@@ -218,7 +279,9 @@ describe("Feature - Relation Transformers", () => {
           users_groups: [],
           groups: [],
           user_profile: null,
-          user_profile_attributes: []
+          user_profile_attributes: [],
+          embedded_group_ids: null,
+          embedded_groups: []
         }
       },
       user_profiles: {

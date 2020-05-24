@@ -219,4 +219,91 @@ describe("Feature - Relation Transformers", () => {
       houses: {}
     });
   });
+
+  it("transforms the `morphedByMany` relation", async () => {
+    const store = createStore(...ModelFactory.presetClusters.peopleAndInhabitables);
+    const {people: Person} = store.$db().models();
+
+    mock.onGet("/api/people").reply(200, {
+      data: [
+        {
+          id: 1,
+          type: "people",
+          attributes: {
+            name: "Allen Newell"
+          },
+          relationships: {
+            houses: {
+              data: [
+                {id: 1, type: "houses"}
+              ]
+            },
+            offices: {
+              data: [
+                {id: 1, type: "offices"}
+              ]
+            }
+          }
+        },
+        {
+          id: 2,
+          type: "people",
+          attributes: {
+            name: "Herb Simon"
+          },
+          relationships: {
+            houses: {
+              data: [
+                {id: 2, type: "houses"}
+              ]
+            },
+            offices: {
+              data: [
+                {id: 1, type: "offices"}
+              ]
+            }
+          }
+        }
+      ],
+      included: [
+        {id: 1, type: "houses", attributes: {name: "Allen's House"}},
+        {id: 2, type: "houses", attributes: {name: "Herb's House"}},
+        {id: 1, type: "offices", attributes: {name: "Newell Simon Hall"}}
+      ]
+    });
+
+    await Person.jsonApi().index();
+
+    assertState(store, {
+      people: {
+        1: {$id: "1", id: 1, houses: [], offices: [], name: "Allen Newell"},
+        2: {$id: "2", id: 2, houses: [], offices: [], name: "Herb Simon"},
+      },
+      houses: {
+        1: {$id: "1", id: 1, people: [], name: "Allen's House"},
+        2: {$id: "2", id: 2, people: [], name: "Herb's House"}
+      },
+      offices: {
+        1: {$id: "1", id: 1, people: [], name: "Newell Simon Hall"}
+      },
+      inhabitables: {
+        "1_1_houses": {
+          $id: "1_1_houses", id: null, inhabitable_id: 1, inhabitable_type: "houses", person_id: 1,
+          inhabitable: null, person: null
+        },
+        "2_2_houses": {
+          $id: "2_2_houses", id: null, inhabitable_id: 2, inhabitable_type: "houses", person_id: 2,
+          inhabitable: null, person: null
+        },
+        "1_1_offices": {
+          $id: "1_1_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 1,
+          inhabitable: null, person: null
+        },
+        "1_2_offices": {
+          $id: "1_2_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 2,
+          inhabitable: null, person: null
+        },
+      }
+    });
+  });
 });

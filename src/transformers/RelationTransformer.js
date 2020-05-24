@@ -7,9 +7,10 @@ export default class extends FieldTransformer {
 
     this.relation = relation;
     this.resourceToEntityCase = config.resourceToEntityCase;
+    this.isPolymorphic = !!(relation.id && relation.type);
   }
 
-  transform(_data, _output) {
+  transform(_data, _output, _id = null, _insertionStore = null) {
     throw Utils.error("Method not implemented");
   }
 

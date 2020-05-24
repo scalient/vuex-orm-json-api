@@ -1,3 +1,6 @@
+import InsertionStore from "../InsertionStore";
+import Utils from "../Utils";
+
 export default class {
   constructor(database, config) {
     this.database = database;
@@ -5,31 +8,49 @@ export default class {
   }
 
   transform(data) {
+    let insertionStore = new InsertionStore();
     let primaryData = data.data;
 
     if (primaryData instanceof Array) {
-      primaryData = primaryData.map((data) => this.transformResource(data));
+      primaryData.forEach((data) => this.transformResource(data, insertionStore, true));
     } else {
-      primaryData = this.transformResource(primaryData);
+      this.transformResource(primaryData, insertionStore, true);
     }
 
-    let includedData = data.included;
+    let includedData = data.included || [];
+    includedData.forEach((data) => this.transformResource(data, insertionStore, false));
 
-    if (includedData) {
-      includedData = includedData.map((data) => this.transformResource(data));
+    if (primaryData instanceof Array) {
+      return {
+        data: insertionStore.recordQueue.filter((record) => record.isPrimary),
+        included: insertionStore.recordQueue.filter((record) => !record.isPrimary)
+      };
+    } else {
+      let primaryRecords = insertionStore.recordQueue.filter((record) => record.isPrimary);
+
+      if (primaryRecords.length !== 1) {
+        throw Utils.error("Expected singleton array for pre-insertion records");
+      }
+
+      return {
+        data: primaryRecords[0],
+        included: insertionStore.recordQueue.filter((record) => !record.isPrimary)
+      };
     }
-
-    return {data: primaryData, included: includedData};
   }
 
-  transformResource(data) {
+  transformResource(data, insertionStore, isPrimary) {
     // Convert JSON:API casing to Vuex ORM casing and look up the model.
     let model = this.database.model(this.resourceToEntityCase(data.type));
+    let type = model.entity;
+    let resourceId = data.id;
+    let localKey = model.localKey();
+    let record = insertionStore.fetchRecord(type, resourceId, localKey);
 
-    let output = {type: model.entity, data: {}};
+    // This record may have started life as non-primary, and the `DocumentTransformer` has the authoritative say on
+    // whether it is primary.
+    record.isPrimary = isPrimary;
 
-    model.jsonApiTransformer.transform(data, output.data);
-
-    return output;
+    model.jsonApiTransformer.transform(data, record.data, insertionStore);
   }
 }

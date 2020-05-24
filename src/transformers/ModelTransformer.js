@@ -72,8 +72,10 @@ export default class {
     });
   }
 
-  transform(data, output) {
-    this.attributeTransformers.id.transform(data.id, output);
+  transform(data, output, insertionStore) {
+    const id = data.id;
+
+    this.attributeTransformers.id.transform(id, output);
 
     if (data.attributes) {
       Object.entries(data.attributes).forEach(([attributeName, value]) => {
@@ -96,7 +98,7 @@ export default class {
         let transformer = this.relationTransformers[relationName];
 
         if (transformer) {
-          transformer.transform(data.data, output);
+          transformer.transform(data.data, output, id, insertionStore);
         }
       });
     }

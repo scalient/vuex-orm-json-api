@@ -27,7 +27,7 @@ export default class {
   }
 
   static presetClusters = {
-    // Used to test the `BelongsTo`, `BelongsToMany`, and `HasOne` relations.
+    // Used to test the `BelongsTo`, `HasMany`, `BelongsToMany`, and `HasOne` relations.
     usersAndGroups: ["users", "groups", "users_groups", "user_profiles"],
     // Used to test the `MorphToMany` and `MorphedByMany` relations.
     peopleAndInhabitables: ["people", "inhabitables", "houses", "offices"],

@@ -55,6 +55,57 @@ describe("Feature - Relation Transformers", () => {
     });
   });
 
+  it("transforms the `HasMany` relation", async () => {
+    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const {users: User} = store.$db().models();
+
+    mock.onGet("/api/users/1").reply(200, {
+      data: {
+        id: 1,
+        type: "users",
+        attributes: {
+          name: "Harry Bovik"
+        },
+        relationships: {
+          "users-groups": {
+            data: [
+              {id: 1, type: "users-groups"}
+            ]
+          }
+        }
+      },
+      included: [
+        {
+          id: 1, type: "users-groups",
+          relationships: {
+            group: {
+              data: {id: 1, type: "groups"}
+            }
+          }
+        },
+        {id: 1, type: "groups", attributes: {name: "CMU"}}
+      ]
+    });
+
+    await User.jsonApi().show(1);
+
+    // This is also testing `InsertionStore`'s ability to make the `UsersGroup` record available for relational
+    // manipulation by both the `User` and `Group` record, thus correctly populating the `user_id` and `group_id`
+    // attributes, thus ensuring that the `["user_id", "group_id"]` primary key can be generated.
+    assertState(store, {
+      users: {
+        1: {$id: "1", id: 1, name: "Harry Bovik", users_groups: [], groups: [], user_profile: null}
+      },
+      groups: {
+        1: {$id: "1", id: 1, name: "CMU", users_groups: [], users: []}
+      },
+      users_groups: {
+        "[1,1]": {$id: "[1,1]", id: 1, user_id: 1, user: null, group_id: 1, group: null}
+      },
+      user_profiles: {}
+    });
+  });
+
   it("transforms the `BelongsToMany` relation", async () => {
     const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();

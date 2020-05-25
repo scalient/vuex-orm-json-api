@@ -38,19 +38,21 @@ export default class {
       }
     }
 
+    let scope = this.config.scope;
+
     switch (multiplicity) {
     case "many":
       if (!(data instanceof Array) || !data) {
         throw Utils.error("Expected an array JSON:API response, but got an object or nothing instead");
       }
 
-      return await this.commitResources(database, data, included);
+      return await this.commitResources(database, data, included, scope);
     case "one":
       if (data instanceof Array || !data) {
         throw Utils.error("Expected an object JSON:API response, but got an array or nothing instead");
       }
 
-      return await this.commitResource(database, data, included);
+      return await this.commitResource(database, data, included, scope);
     case "none":
       if (data) {
         throw Utils.error("Expected nothing for the JSON:API response's primary data, but got something instead");
@@ -78,7 +80,7 @@ export default class {
   /**
    * Finds the newly upserted record from the given resource.
    */
-  findRecordFromResource(database, transformedResource) {
+  findRecordFromResource(database, transformedResource, scope) {
     let model = database.model(transformedResource.type);
     let primaryKey = model.primaryKey;
     let primaryKeyValue;
@@ -89,31 +91,37 @@ export default class {
       primaryKeyValue = primaryKey.map((keyComponent) => transformedResource[keyComponent]);
     }
 
-    return model.find(primaryKeyValue);
+    let query = model.query().whereId(primaryKeyValue);
+
+    if (scope) {
+      scope(query);
+    }
+
+    return query.first();
   }
 
   /**
    * Commits multiple JSON:API resources.
    */
-  async commitResources(database, data, included) {
+  async commitResources(database, data, included, scope) {
     for (let transformedResource of data.concat(included)) {
       await this.upsertTransformedResource(database, transformedResource);
     }
 
-    return data.map((data) => this.findRecordFromResource(database, data));
+    return data.map((data) => this.findRecordFromResource(database, data, scope));
   }
 
   /**
    * Commits a JSON:API resource.
    */
-  async commitResource(database, data, included) {
+  async commitResource(database, data, included, scope) {
     await this.upsertTransformedResource(database, data);
 
     for (let transformedResource of included) {
       await this.upsertTransformedResource(database, transformedResource);
     }
 
-    return this.findRecordFromResource(database, data);
+    return this.findRecordFromResource(database, data, scope);
   }
 
   /**

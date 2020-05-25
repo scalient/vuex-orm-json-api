@@ -335,4 +335,70 @@ describe("Feature - RESTful Actions", () => {
       Utils.error("Expected an array JSON:API response, but got an object or nothing instead")
     );
   });
+
+  it("applies a user-defined query scope", async () => {
+    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const {users: User} = store.$db().models();
+
+    mock.onGet("/api/users/1").reply(200, {
+      data: {
+        id: 1,
+        type: "users",
+        attributes: {
+          name: "Harry Bovik"
+        },
+        relationships: {
+          "users-groups": {
+            data: [
+              {id: 1, type: "users-groups"}
+            ]
+          }
+        }
+      },
+      included: [
+        {
+          id: 1,
+          type: "users-groups",
+          relationships: {
+            group: {
+              data: {
+                id: 1,
+                type: "groups"
+              }
+            }
+          }
+        },
+        {id: 1, type: "groups", attributes: {name: "CMU"}}
+      ]
+    });
+
+    const user = await User.jsonApi().show(1, {scope: (query) => query.with("users_groups.group")});
+
+    expect(user).toEqual({
+      $id: "1",
+      id: 1,
+      name: "Harry Bovik",
+      users_groups: [
+        {
+          $id: "[1,1]",
+          id: 1,
+          user_id: 1,
+          user: null,
+          group_id: 1,
+          group: {
+            $id: "1",
+            id: 1,
+            name: "CMU",
+            users: [],
+            users_groups: []
+          }
+        }
+      ],
+      groups: [],
+      user_profile: null,
+      user_profile_attributes: [],
+      embedded_group_ids: null,
+      embedded_groups: []
+    });
+  });
 });

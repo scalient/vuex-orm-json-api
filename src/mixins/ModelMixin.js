@@ -3,7 +3,7 @@ import ModelTransformer from "../transformers/ModelTransformer";
 import Request from "../json_api/Request";
 
 export default class {
-  static include(modelComponent, config) {
+  static include(modelComponent, attributeClasses, config) {
     // Only install axios if it hasn't been set by plugin-axios.
     modelComponent.axios = modelComponent.axios || config.axios || null;
 
@@ -12,6 +12,7 @@ export default class {
       apiRoot: API_ROOT,
       resourceToEntityCase: defaultResourceToEntityCase,
       entityToResourceRouteCase: defaultEntityToResourceRouteCase,
+      attributeClasses: attributeClasses,
       ...config
     };
 

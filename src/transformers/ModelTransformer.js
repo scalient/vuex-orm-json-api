@@ -1,22 +1,3 @@
-import {
-  HasOne,
-  BelongsTo,
-  HasMany,
-  HasManyBy,
-  HasManyThrough,
-  BelongsToMany,
-  MorphTo,
-  MorphOne,
-  MorphMany,
-  MorphToMany,
-  MorphedByMany,
-  Attr,
-  String,
-  Number,
-  Boolean,
-  Uid
-} from "@vuex-orm/core";
-
 import Utils from "../Utils";
 import AttributeTransformer from "./AttributeTransformer";
 import BelongsToRelationTransformer from "./BelongsToRelationTransformer";
@@ -31,6 +12,11 @@ export default class {
     this.relationTransformers = {};
     this.attributeTransformers = {};
     this.resourceToEntityCase = config.resourceToEntityCase;
+
+    let {
+      HasOne, BelongsTo, HasMany, HasManyBy, HasManyThrough, BelongsToMany, MorphTo, MorphOne, MorphMany, MorphToMany,
+      MorphedByMany, Attr, String, Number, Boolean, Uid
+    } = config.attributeClasses;
 
     Object.entries(model.fields()).forEach(([fieldName, field]) => {
       let fieldType = field.constructor;

@@ -7,7 +7,8 @@
     "watch": "webpack --watch --mode=production",
     "build": "webpack --mode=production",
     "lint": "eslint -- \"{src,test}/**/*.js\"",
-    "test": "jest"
+    "test": "jest",
+    "release": "node -- scripts/release.js"
   },
   "repository": {
     "type": "git",

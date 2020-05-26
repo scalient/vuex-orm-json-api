@@ -3,6 +3,7 @@ import MockAdapter from "axios-mock-adapter";
 import {describe, it, beforeEach, afterEach, expect} from "@jest/globals";
 import {createStore} from "spec/support/spec_helper";
 import ModelFactory from "../models/ModelFactory";
+import Utils from "../../src/Utils";
 
 describe("Feature - Requests", () => {
   let mock;
@@ -40,5 +41,25 @@ describe("Feature - Requests", () => {
       expect(axiosError.response.status).toBe(422);
       expect(axiosError.response.data).toEqual(response);
     }
+  });
+
+  it("throws a `JsonApiError` when a model can't be found", async () => {
+    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const {users: User} = store.$db().models();
+
+    const payload = {
+      user: {}
+    };
+
+    mock.onGet("/api/users").reply(200, {
+      data: {
+        id: 1,
+        type: "things"
+      }
+    });
+
+    await expect(User.jsonApi().index()).rejects.toThrow(
+      Utils.error("Couldn't find the model for entity type `things`")
+    );
   });
 });

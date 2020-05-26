@@ -41,8 +41,8 @@ export default class {
 
   transformResource(data, insertionStore, isPrimary) {
     // Convert JSON:API casing to Vuex ORM casing and look up the model.
-    let model = this.database.model(this.resourceToEntityCase(data.type));
-    let type = model.entity;
+    let type = this.resourceToEntityCase(data.type);
+    let model = Utils.modelFor(this.database, type);
     let resourceId = data.id;
     let localKey = model.localKey();
     let record = insertionStore.fetchRecord(type, resourceId, localKey);

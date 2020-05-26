@@ -72,7 +72,7 @@ export default class {
    * Upserts a Vuex ORM-ready JSON:API resource.
    */
   async upsertTransformedResource(database, transformedResource) {
-    let model = database.model(transformedResource.type);
+    let model = Utils.modelFor(database, transformedResource.type);
 
     await model.insertOrUpdate({data: transformedResource.data});
   }
@@ -81,7 +81,7 @@ export default class {
    * Finds the newly upserted record from the given resource.
    */
   findRecordFromResource(database, transformedResource, scope) {
-    let model = database.model(transformedResource.type);
+    let model = Utils.modelFor(database, transformedResource.type);
     let primaryKey = model.primaryKey;
     let primaryKeyValue;
 

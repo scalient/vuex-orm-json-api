@@ -3,43 +3,47 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    node: true
+    node: true,
   },
   extends: [
-    "eslint:recommended"
+    "eslint:recommended",
   ],
   globals: {
     Atomics: "readonly",
-    SharedArrayBuffer: "readonly"
+    SharedArrayBuffer: "readonly",
   },
   parserOptions: {
     ecmaVersion: 11,
-    sourceType: "module"
+    sourceType: "module",
   },
   rules: {
     indent: [
       "error",
-      2
+      2,
     ],
     "linebreak-style": [
       "error",
-      "unix"
+      "unix",
     ],
     semi: [
       "error",
-      "always"
+      "always",
     ],
     "no-trailing-spaces": [
       "error",
-      {ignoreComments: true}
+      {ignoreComments: true},
     ],
     "eol-last": [
       "error",
-      "always"
+      "always",
     ],
     "no-unused-vars": [
       "error",
-      {argsIgnorePattern: "^_"}
-    ]
-  }
+      {argsIgnorePattern: "^_"},
+    ],
+    "comma-dangle": [
+      "error",
+      "always-multiline",
+    ],
+  },
 };

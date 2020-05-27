@@ -22,13 +22,13 @@ describe("Feature - Requests", () => {
     const {users: User} = store.$db().models();
 
     const payload = {
-      user: {}
+      user: {},
     };
 
     const response = {
       errors: [
-        {id: 1, detail: "Validation failed: Name can't be blank"}
-      ]
+        {id: 1, detail: "Validation failed: Name can't be blank"},
+      ],
     };
 
     mock.onPost("/api/users", payload).reply(422, response);
@@ -48,18 +48,18 @@ describe("Feature - Requests", () => {
     const {users: User} = store.$db().models();
 
     const payload = {
-      user: {}
+      user: {},
     };
 
     mock.onGet("/api/users").reply(200, {
       data: {
         id: 1,
-        type: "things"
-      }
+        type: "things",
+      },
     });
 
     await expect(User.jsonApi().index()).rejects.toThrow(
-      Utils.error("Couldn't find the model for entity type `things`")
+      Utils.error("Couldn't find the model for entity type `things`"),
     );
   });
 });

@@ -13,7 +13,7 @@ export default class {
       resourceToEntityCase: defaultResourceToEntityCase,
       entityToResourceRouteCase: defaultEntityToResourceRouteCase,
       attributeClasses: attributeClasses,
-      ...config
+      ...config,
     };
 
     // Model-specific config.
@@ -34,7 +34,7 @@ export default class {
         }
 
         return this.cachedTransformer;
-      }
+      },
     });
 
     // The JSON:API adapter.

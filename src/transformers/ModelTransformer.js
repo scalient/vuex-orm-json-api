@@ -15,7 +15,7 @@ export default class {
 
     let {
       HasOne, BelongsTo, HasMany, HasManyBy, HasManyThrough, BelongsToMany, MorphTo, MorphOne, MorphMany, MorphToMany,
-      MorphedByMany, Attr, String, Number, Boolean, Uid
+      MorphedByMany, Attr, String, Number, Boolean, Uid,
     } = config.attributeClasses;
 
     Object.entries(model.fields()).forEach(([fieldName, field]) => {

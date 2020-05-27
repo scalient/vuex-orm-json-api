@@ -26,17 +26,17 @@ describe("Feature - Relation Transformers", () => {
         type: "users-groups",
         relationships: {
           user: {
-            data: {id: 1, type: "users"}
+            data: {id: 1, type: "users"},
           },
           group: {
-            data: {id: 1, type: "groups"}
-          }
-        }
+            data: {id: 1, type: "groups"},
+          },
+        },
       },
       included: [
         {id: 1, type: "users", attributes: {name: "Harry Bovik"}},
-        {id: 1, type: "groups", attributes: {name: "CMU"}}
-      ]
+        {id: 1, type: "groups", attributes: {name: "CMU"}},
+      ],
     });
 
     await UsersGroup.jsonApi().show(1);
@@ -53,17 +53,17 @@ describe("Feature - Relation Transformers", () => {
           user_profile: null,
           user_profile_attributes: [],
           embedded_group_ids: null,
-          embedded_groups: []
-        }
+          embedded_groups: [],
+        },
       },
       groups: {
-        1: {$id: "1", id: 1, name: "CMU", users_groups: [], users: []}
+        1: {$id: "1", id: 1, name: "CMU", users_groups: [], users: []},
       },
       users_groups: {
-        "[1,1]": {$id: "[1,1]", id: 1, user_id: 1, user: null, group_id: 1, group: null}
+        "[1,1]": {$id: "[1,1]", id: 1, user_id: 1, user: null, group_id: 1, group: null},
       },
       user_profiles: {},
-      user_profile_attributes: {}
+      user_profile_attributes: {},
     });
   });
 
@@ -76,27 +76,27 @@ describe("Feature - Relation Transformers", () => {
         id: 1,
         type: "users",
         attributes: {
-          name: "Harry Bovik"
+          name: "Harry Bovik",
         },
         relationships: {
           "users-groups": {
             data: [
-              {id: 1, type: "users-groups"}
-            ]
-          }
-        }
+              {id: 1, type: "users-groups"},
+            ],
+          },
+        },
       },
       included: [
         {
           id: 1, type: "users-groups",
           relationships: {
             group: {
-              data: {id: 1, type: "groups"}
-            }
-          }
+              data: {id: 1, type: "groups"},
+            },
+          },
         },
-        {id: 1, type: "groups", attributes: {name: "CMU"}}
-      ]
+        {id: 1, type: "groups", attributes: {name: "CMU"}},
+      ],
     });
 
     await User.jsonApi().show(1);
@@ -115,17 +115,17 @@ describe("Feature - Relation Transformers", () => {
           user_profile: null,
           user_profile_attributes: [],
           embedded_group_ids: null,
-          embedded_groups: []
-        }
+          embedded_groups: [],
+        },
       },
       groups: {
-        1: {$id: "1", id: 1, name: "CMU", users_groups: [], users: []}
+        1: {$id: "1", id: 1, name: "CMU", users_groups: [], users: []},
       },
       users_groups: {
-        "[1,1]": {$id: "[1,1]", id: 1, user_id: 1, user: null, group_id: 1, group: null}
+        "[1,1]": {$id: "[1,1]", id: 1, user_id: 1, user: null, group_id: 1, group: null},
       },
       user_profiles: {},
-      user_profile_attributes: {}
+      user_profile_attributes: {},
     });
   });
 
@@ -138,23 +138,23 @@ describe("Feature - Relation Transformers", () => {
         id: 1,
         type: "users",
         attributes: {
-          name: "Harry Bovik"
+          name: "Harry Bovik",
         },
         relationships: {
           embedded_groups: {
             data: [
               {id: 1, type: "groups"},
               {id: 2, type: "groups"},
-              {id: 3, type: "groups"}
-            ]
-          }
-        }
+              {id: 3, type: "groups"},
+            ],
+          },
+        },
       },
       included: [
         {id: 1, type: "groups", attributes: {name: "A"}},
         {id: 2, type: "groups", attributes: {name: "B"}},
-        {id: 3, type: "groups", attributes: {name: "C"}}
-      ]
+        {id: 3, type: "groups", attributes: {name: "C"}},
+      ],
     });
 
     await User.jsonApi().show(1);
@@ -170,17 +170,17 @@ describe("Feature - Relation Transformers", () => {
           user_profile: null,
           user_profile_attributes: [],
           embedded_group_ids: [1, 2, 3],
-          embedded_groups: []
-        }
+          embedded_groups: [],
+        },
       },
       groups: {
         1: {$id: "1", id: 1, name: "A", users_groups: [], users: []},
         2: {$id: "2", id: 2, name: "B", users_groups: [], users: []},
-        3: {$id: "3", id: 3, name: "C", users_groups: [], users: []}
+        3: {$id: "3", id: 3, name: "C", users_groups: [], users: []},
       },
       users_groups: {},
       user_profiles: {},
-      user_profile_attributes: {}
+      user_profile_attributes: {},
     });
   });
 
@@ -193,23 +193,23 @@ describe("Feature - Relation Transformers", () => {
         id: 1,
         type: "users",
         attributes: {
-          name: "Harry Bovik"
+          name: "Harry Bovik",
         },
         relationships: {
           groups: {
             data: [
               {id: 1, type: "groups"},
               {id: 2, type: "groups"},
-              {id: 3, type: "groups"}
-            ]
-          }
-        }
+              {id: 3, type: "groups"},
+            ],
+          },
+        },
       },
       included: [
         {id: 1, type: "groups", attributes: {name: "A"}},
         {id: 2, type: "groups", attributes: {name: "B"}},
-        {id: 3, type: "groups", attributes: {name: "C"}}
-      ]
+        {id: 3, type: "groups", attributes: {name: "C"}},
+      ],
     });
 
     await User.jsonApi().show(1);
@@ -225,21 +225,21 @@ describe("Feature - Relation Transformers", () => {
           user_profile: null,
           user_profile_attributes: [],
           embedded_group_ids: null,
-          embedded_groups: []
-        }
+          embedded_groups: [],
+        },
       },
       groups: {
         1: {$id: "1", id: 1, name: "A", users_groups: [], users: []},
         2: {$id: "2", id: 2, name: "B", users_groups: [], users: []},
-        3: {$id: "3", id: 3, name: "C", users_groups: [], users: []}
+        3: {$id: "3", id: 3, name: "C", users_groups: [], users: []},
       },
       users_groups: {
         "[1,1]": {$id: "[1,1]", id: null, user_id: 1, user: null, group_id: 1, group: null},
         "[1,2]": {$id: "[1,2]", id: null, user_id: 1, user: null, group_id: 2, group: null},
-        "[1,3]": {$id: "[1,3]", id: null, user_id: 1, user: null, group_id: 3, group: null}
+        "[1,3]": {$id: "[1,3]", id: null, user_id: 1, user: null, group_id: 3, group: null},
       },
       user_profiles: {},
-      user_profile_attributes: {}
+      user_profile_attributes: {},
     });
   });
 
@@ -252,20 +252,20 @@ describe("Feature - Relation Transformers", () => {
         id: 1,
         type: "users",
         attributes: {
-          name: "Harry Bovik"
+          name: "Harry Bovik",
         },
         relationships: {
           "user-profile": {
             data: {
               id: 1,
-              type: "user-profiles"
-            }
-          }
-        }
+              type: "user-profiles",
+            },
+          },
+        },
       },
       included: [
-        {id: 1, type: "user-profiles"}
-      ]
+        {id: 1, type: "user-profiles"},
+      ],
     });
 
     await User.jsonApi().show(1);
@@ -281,15 +281,15 @@ describe("Feature - Relation Transformers", () => {
           user_profile: null,
           user_profile_attributes: [],
           embedded_group_ids: null,
-          embedded_groups: []
-        }
+          embedded_groups: [],
+        },
       },
       user_profiles: {
-        1: {$id: "1", id: 1, user_id: 1, user: null}
+        1: {$id: "1", id: 1, user_id: 1, user: null},
       },
       groups: {},
       users_groups: {},
-      user_profile_attributes: {}
+      user_profile_attributes: {},
     });
   });
 
@@ -302,26 +302,26 @@ describe("Feature - Relation Transformers", () => {
         id: 1,
         type: "users",
         attributes: {
-          name: "Harry Bovik"
+          name: "Harry Bovik",
         },
         relationships: {
           "user-profile-attributes": {
             data: [
               {
                 id: 1,
-                type: "user-profile-attributes"
-              }
-            ]
-          }
-        }
+                type: "user-profile-attributes",
+              },
+            ],
+          },
+        },
       },
       included: [
-        {id: 1, type: "user-profile-attributes"}
-      ]
+        {id: 1, type: "user-profile-attributes"},
+      ],
     });
 
     await expect(User.jsonApi().show(1)).rejects.toThrow(
-      Utils.error("Writing directly to a `HasManyThrough` relation is not supported")
+      Utils.error("Writing directly to a `HasManyThrough` relation is not supported"),
     );
   });
 
@@ -335,38 +335,38 @@ describe("Feature - Relation Transformers", () => {
           id: 1,
           type: "offices",
           attributes: {
-            name: "Newell Simon Hall"
+            name: "Newell Simon Hall",
           },
           relationships: {
             people: {
               data: [
                 {id: 1, type: "people"},
                 {id: 2, type: "people"},
-                {id: 3, type: "people"}
-              ]
-            }
-          }
+                {id: 3, type: "people"},
+              ],
+            },
+          },
         },
         {
           id: 2,
           type: "offices",
           attributes: {
-            name: "Wean Hall"
+            name: "Wean Hall",
           },
           relationships: {
             people: {
               data: [
-                {id: 3, type: "people"}
-              ]
-            }
-          }
-        }
+                {id: 3, type: "people"},
+              ],
+            },
+          },
+        },
       ],
       included: [
         {id: 1, type: "people", attributes: {name: "Allen Newell"}},
         {id: 2, type: "people", attributes: {name: "Herb Simon"}},
-        {id: 3, type: "people", attributes: {name: "Harry Bovik"}}
-      ]
+        {id: 3, type: "people", attributes: {name: "Harry Bovik"}},
+      ],
     });
 
     await Office.jsonApi().index();
@@ -375,7 +375,7 @@ describe("Feature - Relation Transformers", () => {
       people: {
         1: {$id: "1", id: 1, houses: [], offices: [], name: "Allen Newell"},
         2: {$id: "2", id: 2, houses: [], offices: [], name: "Herb Simon"},
-        3: {$id: "3", id: 3, houses: [], offices: [], name: "Harry Bovik"}
+        3: {$id: "3", id: 3, houses: [], offices: [], name: "Harry Bovik"},
       },
       offices: {
         1: {$id: "1", id: 1, people: [], name: "Newell Simon Hall"},
@@ -384,22 +384,22 @@ describe("Feature - Relation Transformers", () => {
       inhabitables: {
         "1_1_offices": {
           $id: "1_1_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 1,
-          inhabitable: null, person: null
+          inhabitable: null, person: null,
         },
         "1_2_offices": {
           $id: "1_2_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 2,
-          inhabitable: null, person: null
+          inhabitable: null, person: null,
         },
         "1_3_offices": {
           $id: "1_3_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 3,
-          inhabitable: null, person: null
+          inhabitable: null, person: null,
         },
         "2_3_offices": {
           $id: "2_3_offices", id: null, inhabitable_id: 2, inhabitable_type: "offices", person_id: 3,
-          inhabitable: null, person: null
+          inhabitable: null, person: null,
         },
       },
-      houses: {}
+      houses: {},
     });
   });
 
@@ -413,46 +413,46 @@ describe("Feature - Relation Transformers", () => {
           id: 1,
           type: "people",
           attributes: {
-            name: "Allen Newell"
+            name: "Allen Newell",
           },
           relationships: {
             houses: {
               data: [
-                {id: 1, type: "houses"}
-              ]
+                {id: 1, type: "houses"},
+              ],
             },
             offices: {
               data: [
-                {id: 1, type: "offices"}
-              ]
-            }
-          }
+                {id: 1, type: "offices"},
+              ],
+            },
+          },
         },
         {
           id: 2,
           type: "people",
           attributes: {
-            name: "Herb Simon"
+            name: "Herb Simon",
           },
           relationships: {
             houses: {
               data: [
-                {id: 2, type: "houses"}
-              ]
+                {id: 2, type: "houses"},
+              ],
             },
             offices: {
               data: [
-                {id: 1, type: "offices"}
-              ]
-            }
-          }
-        }
+                {id: 1, type: "offices"},
+              ],
+            },
+          },
+        },
       ],
       included: [
         {id: 1, type: "houses", attributes: {name: "Allen's House"}},
         {id: 2, type: "houses", attributes: {name: "Herb's House"}},
-        {id: 1, type: "offices", attributes: {name: "Newell Simon Hall"}}
-      ]
+        {id: 1, type: "offices", attributes: {name: "Newell Simon Hall"}},
+      ],
     });
 
     await Person.jsonApi().index();
@@ -464,29 +464,29 @@ describe("Feature - Relation Transformers", () => {
       },
       houses: {
         1: {$id: "1", id: 1, people: [], name: "Allen's House"},
-        2: {$id: "2", id: 2, people: [], name: "Herb's House"}
+        2: {$id: "2", id: 2, people: [], name: "Herb's House"},
       },
       offices: {
-        1: {$id: "1", id: 1, people: [], name: "Newell Simon Hall"}
+        1: {$id: "1", id: 1, people: [], name: "Newell Simon Hall"},
       },
       inhabitables: {
         "1_1_houses": {
           $id: "1_1_houses", id: null, inhabitable_id: 1, inhabitable_type: "houses", person_id: 1,
-          inhabitable: null, person: null
+          inhabitable: null, person: null,
         },
         "2_2_houses": {
           $id: "2_2_houses", id: null, inhabitable_id: 2, inhabitable_type: "houses", person_id: 2,
-          inhabitable: null, person: null
+          inhabitable: null, person: null,
         },
         "1_1_offices": {
           $id: "1_1_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 1,
-          inhabitable: null, person: null
+          inhabitable: null, person: null,
         },
         "1_2_offices": {
           $id: "1_2_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 2,
-          inhabitable: null, person: null
+          inhabitable: null, person: null,
         },
-      }
+      },
     });
   });
 
@@ -499,29 +499,29 @@ describe("Feature - Relation Transformers", () => {
         id: 1,
         type: "toys",
         attributes: {
-          name: "Sheriff Woody"
+          name: "Sheriff Woody",
         },
         relationships: {
           owner: {
-            data: {id: 1, type: "children"}
-          }
-        }
+            data: {id: 1, type: "children"},
+          },
+        },
       },
       included: [
-        {id: 1, type: "children", attributes: {name: "Andy"}}
-      ]
+        {id: 1, type: "children", attributes: {name: "Andy"}},
+      ],
     });
 
     await Toy.jsonApi().show(1);
 
     assertState(store, {
       toys: {
-        1: {$id: "1", id: 1, owner_id: 1, owner_type: "children", name: "Sheriff Woody", owner: null}
+        1: {$id: "1", id: 1, owner_id: 1, owner_type: "children", name: "Sheriff Woody", owner: null},
       },
       children: {
-        "1": {$id: "1", id: 1, name: "Andy", toys: [], monster_in_the_closet: null}
+        "1": {$id: "1", id: 1, name: "Andy", toys: [], monster_in_the_closet: null},
       },
-      monsters: {}
+      monsters: {},
     });
   });
 
@@ -534,37 +534,37 @@ describe("Feature - Relation Transformers", () => {
         id: 1,
         type: "children",
         attributes: {
-          name: "Andy"
+          name: "Andy",
         },
         relationships: {
           toys: {
             data: [
               {id: 1, type: "toys"},
               {id: 2, type: "toys"},
-              {id: 3, type: "toys"}
-            ]
-          }
-        }
+              {id: 3, type: "toys"},
+            ],
+          },
+        },
       },
       included: [
         {id: 1, type: "toys", attributes: {name: "Sheriff Woody"}},
         {id: 2, type: "toys", attributes: {name: "Buzz Lightyear"}},
-        {id: 3, type: "toys", attributes: {name: "Bo Peep"}}
-      ]
+        {id: 3, type: "toys", attributes: {name: "Bo Peep"}},
+      ],
     });
 
     await Child.jsonApi().show(1);
 
     assertState(store, {
       children: {
-        "1": {$id: "1", id: 1, name: "Andy", toys: [], monster_in_the_closet: null}
+        "1": {$id: "1", id: 1, name: "Andy", toys: [], monster_in_the_closet: null},
       },
       toys: {
         1: {$id: "1", id: 1, owner_id: 1, owner_type: "children", name: "Sheriff Woody", owner: null},
         2: {$id: "2", id: 2, owner_id: 1, owner_type: "children", name: "Buzz Lightyear", owner: null},
-        3: {$id: "3", id: 3, owner_id: 1, owner_type: "children", name: "Bo Peep", owner: null}
+        3: {$id: "3", id: 3, owner_id: 1, owner_type: "children", name: "Bo Peep", owner: null},
       },
-      monsters: {}
+      monsters: {},
     });
   });
 
@@ -577,29 +577,29 @@ describe("Feature - Relation Transformers", () => {
         id: 1,
         type: "children",
         attributes: {
-          name: "Boo"
+          name: "Boo",
         },
         relationships: {
           "monster-in-the-closet": {
-            data: {id: 1, type: "monsters"}
-          }
-        }
+            data: {id: 1, type: "monsters"},
+          },
+        },
       },
       included: [
-        {id: 1, type: "monsters", attributes: {name: "Sully"}}
-      ]
+        {id: 1, type: "monsters", attributes: {name: "Sully"}},
+      ],
     });
 
     await Child.jsonApi().show(1);
 
     assertState(store, {
       children: {
-        "1": {$id: "1", id: 1, name: "Boo", toys: [], monster_in_the_closet: null}
+        "1": {$id: "1", id: 1, name: "Boo", toys: [], monster_in_the_closet: null},
       },
       monsters: {
-        1: {$id: "1", id: 1, scaree_id: 1, scaree_type: "children", name: "Sully", scaree: null}
+        1: {$id: "1", id: 1, scaree_id: 1, scaree_type: "children", name: "Sully", scaree: null},
       },
-      toys: {}
+      toys: {},
     });
   });
 });

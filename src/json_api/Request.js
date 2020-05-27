@@ -28,7 +28,7 @@ export default class {
       ...this.model.globalJsonApiConfig,
       ...this.model.jsonApiConfig,
       method: "get", url,
-      ...config
+      ...config,
     });
   }
 
@@ -40,7 +40,7 @@ export default class {
       ...this.model.globalJsonApiConfig,
       ...this.model.jsonApiConfig,
       method: "post", url, data,
-      ...config
+      ...config,
     });
   }
 
@@ -52,7 +52,7 @@ export default class {
       ...this.model.globalJsonApiConfig,
       ...this.model.jsonApiConfig,
       method: "put", url, data,
-      ...config
+      ...config,
     });
   }
 
@@ -64,7 +64,7 @@ export default class {
       ...this.model.globalJsonApiConfig,
       ...this.model.jsonApiConfig,
       method: "patch", url, data,
-      ...config
+      ...config,
     });
   }
 
@@ -76,7 +76,7 @@ export default class {
       ...this.model.globalJsonApiConfig,
       ...this.model.jsonApiConfig,
       method: "delete", url,
-      ...config
+      ...config,
     });
   }
 

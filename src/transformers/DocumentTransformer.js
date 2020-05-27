@@ -23,7 +23,7 @@ export default class {
     if (primaryData instanceof Array) {
       return {
         data: insertionStore.recordQueue.filter((record) => record.isPrimary),
-        included: insertionStore.recordQueue.filter((record) => !record.isPrimary)
+        included: insertionStore.recordQueue.filter((record) => !record.isPrimary),
       };
     } else {
       let primaryRecords = insertionStore.recordQueue.filter((record) => record.isPrimary);
@@ -34,7 +34,7 @@ export default class {
 
       return {
         data: primaryRecords[0],
-        included: insertionStore.recordQueue.filter((record) => !record.isPrimary)
+        included: insertionStore.recordQueue.filter((record) => !record.isPrimary),
       };
     }
   }

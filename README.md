@@ -7,19 +7,19 @@ Vuex ORM analogues of records, attributes, and relations. Also included are REST
 
 ### Installation
 
-1.  When using NPM:
+1.  Installing via NPM:
 
     ```
     npm install --save vuex-orm-json-api
     ```
 
-    When using Yarn:
+    Installing via Yarn:
 
     ```
     yarn add vuex-orm-json-api
     ```
 
-2.  Import the plugin:
+2.  Importing the plugin:
 
     ```
     import axios from "axios";
@@ -244,9 +244,9 @@ the query
 Child.query().whereId(1).with("monster_in_the_closet").first();
 ```
 
-will return Boo along her monster friend Sully.
+will return Boo along with her monster friend Sully.
 
-The library transforms all types of Vuex ORM relations except for `HasManyThrough`. In the many-to-many example above,
+The adapter transforms all types of Vuex ORM relations except for `HasManyThrough`. In the many-to-many example above,
 it takes extra care to ensure that records with composite primary keys have those component `*_id` attributes assigned
 before insertion. As a result, Vuex ORM can maintain its own concept of primary key in the internal `$id` attribute
 independently of the API server's usage of the `id` attribute in JSON:API resources.

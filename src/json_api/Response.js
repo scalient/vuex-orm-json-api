@@ -104,9 +104,9 @@ export default class {
    * Commits multiple JSON:API resources.
    */
   async commitResources(database, data, included, scope) {
-    for (let transformedResource of data.concat(included)) {
-      await this.upsertTransformedResource(database, transformedResource);
-    }
+    await Promise.all(
+      data.concat(included).map((transformedResource) => this.upsertTransformedResource(database, transformedResource)),
+    );
 
     return data.map((data) => this.findRecordFromResource(database, data, scope));
   }
@@ -117,9 +117,9 @@ export default class {
   async commitResource(database, data, included, scope) {
     await this.upsertTransformedResource(database, data);
 
-    for (let transformedResource of included) {
-      await this.upsertTransformedResource(database, transformedResource);
-    }
+    await Promise.all(
+      included.map((transformedResource) => this.upsertTransformedResource(database, transformedResource)),
+    );
 
     return this.findRecordFromResource(database, data, scope);
   }

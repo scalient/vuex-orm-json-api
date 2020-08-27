@@ -1,6 +1,6 @@
-import {API_ROOT, defaultResourceToEntityCase, defaultEntityToResourceRouteCase} from "../constants";
-import ModelTransformer from "../transformers/ModelTransformer";
-import Request from "../json_api/Request";
+import {API_ROOT, defaultResourceToEntityCase, defaultEntityToResourceRouteCase} from '../constants';
+import ModelTransformer from '../transformers/ModelTransformer';
+import Request from '../json_api/Request';
 
 export default class {
   static include(modelComponent, attributeClasses, config) {
@@ -25,7 +25,7 @@ export default class {
     };
 
     // A cache containing model entity name to transformer mappings.
-    Object.defineProperty(modelComponent, "jsonApiTransformer", {
+    Object.defineProperty(modelComponent, 'jsonApiTransformer', {
       get: function () {
         let config = {...this.globalJsonApiConfig, ...this.jsonApiConfig};
 

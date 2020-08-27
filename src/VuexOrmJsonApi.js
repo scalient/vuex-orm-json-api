@@ -1,4 +1,4 @@
-import ModelMixin from "./mixins/ModelMixin";
+import ModelMixin from './mixins/ModelMixin';
 
 export default class {
   constructor(components, config) {

@@ -1,11 +1,11 @@
-import Utils from "../Utils";
-import AttributeTransformer from "./AttributeTransformer";
-import BelongsToRelationTransformer from "./BelongsToRelationTransformer";
-import HasManyByRelationTransformer from "./HasManyByRelationTransformer";
-import HasManyRelationTransformer from "./HasManyRelationTransformer";
-import HasManyThroughRelationTransformer from "./HasManyThroughRelationTransformer";
-import HasOneRelationTransformer from "./HasOneRelationTransformer";
-import MorphToRelationTransformer from "./MorphToRelationTransformer";
+import Utils from '../Utils';
+import AttributeTransformer from './AttributeTransformer';
+import BelongsToRelationTransformer from './BelongsToRelationTransformer';
+import HasManyByRelationTransformer from './HasManyByRelationTransformer';
+import HasManyRelationTransformer from './HasManyRelationTransformer';
+import HasManyThroughRelationTransformer from './HasManyThroughRelationTransformer';
+import HasOneRelationTransformer from './HasOneRelationTransformer';
+import MorphToRelationTransformer from './MorphToRelationTransformer';
 
 export default class {
   constructor(model, config) {
@@ -22,38 +22,38 @@ export default class {
       let fieldType = field.constructor;
 
       switch (fieldType) {
-      case HasOne:
-      case MorphOne:
-        this.relationTransformers[fieldName] = new HasOneRelationTransformer(fieldName, field, config);
-        break;
-      case BelongsTo:
-        this.relationTransformers[fieldName] = new BelongsToRelationTransformer(fieldName, field, config);
-        break;
-      case HasMany:
-      case BelongsToMany:
-      case MorphMany:
-      case MorphToMany:
-      case MorphedByMany:
-        this.relationTransformers[fieldName] = new HasManyRelationTransformer(fieldName, field, config);
-        break;
-      case HasManyBy:
-        this.relationTransformers[fieldName] = new HasManyByRelationTransformer(fieldName, field, config);
-        break;
-      case HasManyThrough:
-        this.relationTransformers[fieldName] = new HasManyThroughRelationTransformer(fieldName, field, config);
-        break;
-      case MorphTo:
-        this.relationTransformers[fieldName] = new MorphToRelationTransformer(fieldName, field, config);
-        break;
-      case Attr:
-      case String:
-      case Number:
-      case Boolean:
-      case Uid:
-        this.attributeTransformers[fieldName] = new AttributeTransformer(fieldName, config);
-        break;
-      default:
-        throw Utils.error(`Field type \`${fieldType}\` not recognized for field \`${fieldName}\``);
+        case HasOne:
+        case MorphOne:
+          this.relationTransformers[fieldName] = new HasOneRelationTransformer(fieldName, field, config);
+          break;
+        case BelongsTo:
+          this.relationTransformers[fieldName] = new BelongsToRelationTransformer(fieldName, field, config);
+          break;
+        case HasMany:
+        case BelongsToMany:
+        case MorphMany:
+        case MorphToMany:
+        case MorphedByMany:
+          this.relationTransformers[fieldName] = new HasManyRelationTransformer(fieldName, field, config);
+          break;
+        case HasManyBy:
+          this.relationTransformers[fieldName] = new HasManyByRelationTransformer(fieldName, field, config);
+          break;
+        case HasManyThrough:
+          this.relationTransformers[fieldName] = new HasManyThroughRelationTransformer(fieldName, field, config);
+          break;
+        case MorphTo:
+          this.relationTransformers[fieldName] = new MorphToRelationTransformer(fieldName, field, config);
+          break;
+        case Attr:
+        case String:
+        case Number:
+        case Boolean:
+        case Uid:
+          this.attributeTransformers[fieldName] = new AttributeTransformer(fieldName, config);
+          break;
+        default:
+          throw Utils.error(`Field type \`${fieldType}\` not recognized for field \`${fieldName}\``);
       }
     });
   }

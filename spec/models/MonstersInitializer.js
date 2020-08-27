@@ -1,6 +1,6 @@
 export default class {
   static initialize({monsters}) {
-    monsters.entity = "monsters";
+    monsters.entity = 'monsters';
 
     monsters.fields = function () {
       return {
@@ -9,7 +9,7 @@ export default class {
 
         scaree_id: this.attr(null),
         scaree_type: this.attr(null),
-        scaree: this.morphTo("scaree_id", "scaree_type")
+        scaree: this.morphTo('scaree_id', 'scaree_type'),
       };
     };
   }

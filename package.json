@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "webpack --watch --mode=production",
     "build": "webpack --mode=production",
-    "lint": "eslint -- \"{src,test}/**/*.js\"",
+    "lint": "eslint --fix -- \"{src,spec}/**/*.js\" \"*.js\"",
     "test": "jest",
     "release": "node -- scripts/release.js"
   },

@@ -1,4 +1,4 @@
-import RelationTransformer from "./RelationTransformer";
+import RelationTransformer from './RelationTransformer';
 
 export default class extends RelationTransformer {
   transform(data, output) {

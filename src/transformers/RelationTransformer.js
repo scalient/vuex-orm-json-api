@@ -1,5 +1,5 @@
-import Utils from "../Utils";
-import FieldTransformer from "./FieldTransformer";
+import Utils from '../Utils';
+import FieldTransformer from './FieldTransformer';
 
 export default class extends FieldTransformer {
   constructor(name, relation, config) {
@@ -11,7 +11,7 @@ export default class extends FieldTransformer {
   }
 
   transform(_data, _output, _id = null, _insertionStore = null) {
-    throw Utils.error("Method not implemented");
+    throw Utils.error('Method not implemented');
   }
 
   static checkType(type, expectedType) {
@@ -22,13 +22,13 @@ export default class extends FieldTransformer {
 
   static checkMany(data) {
     if (!(data instanceof Array)) {
-      throw Utils.error("Expected relation data to be an array");
+      throw Utils.error('Expected relation data to be an array');
     }
   }
 
   static checkSingleton(data) {
     if (data instanceof Array) {
-      throw Utils.error("Expected relation data to be an object");
+      throw Utils.error('Expected relation data to be an object');
     }
   }
 }

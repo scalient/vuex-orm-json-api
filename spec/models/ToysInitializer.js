@@ -1,6 +1,6 @@
 export default class {
   static initialize({toys}) {
-    toys.entity = "toys";
+    toys.entity = 'toys';
 
     toys.fields = function () {
       return {
@@ -9,7 +9,7 @@ export default class {
 
         owner_id: this.attr(null),
         owner_type: this.attr(null),
-        owner: this.morphTo("owner_id", "owner_type")
+        owner: this.morphTo('owner_id', 'owner_type'),
       };
     };
   }

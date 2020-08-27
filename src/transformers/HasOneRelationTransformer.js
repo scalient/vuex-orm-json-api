@@ -1,4 +1,4 @@
-import RelationTransformer from "./RelationTransformer";
+import RelationTransformer from './RelationTransformer';
 
 export default class extends RelationTransformer {
   transform(data, output, selfId = null, insertionStore = null) {
@@ -9,17 +9,21 @@ export default class extends RelationTransformer {
     let expectedType = relatedModel.entity;
     let {type: resourceType, id} = data;
 
-    // See `https://vuex-orm.org/guide/model/relationships.html#one-to-one`,
-    // `https://vuex-orm.org/guide/model/relationships.html#one-to-one-inverse`, and
-    // `https://vuex-orm.org/guide/model/relationships.html#one-to-one-polymorphic`.
+    /*
+     * See `https://vuex-orm.org/guide/model/relationships.html#one-to-one`,
+     * `https://vuex-orm.org/guide/model/relationships.html#one-to-one-inverse`, and
+     * `https://vuex-orm.org/guide/model/relationships.html#one-to-one-polymorphic`.
+     */
 
     let type = this.resourceToEntityCase(resourceType);
 
     this.constructor.checkType(type, expectedType);
 
     if (insertionStore) {
-      // Instead of creating an embedded record, defer to the `InsertionStore` and make this record visible to later
-      // JSON:API resources.
+      /*
+       * Instead of creating an embedded record, defer to the `InsertionStore` and make this record visible to later
+       * JSON:API resources.
+       */
       let record = insertionStore.fetchRecord(type, id, relatedLocalKey);
       let data = record.data;
 

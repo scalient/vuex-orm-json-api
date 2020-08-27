@@ -1,10 +1,10 @@
-import axios from "axios";
-import Vue from "vue";
-import Vuex, {Store} from "vuex";
-import VuexORM, {Database} from "@vuex-orm/core";
-import VuexOrmJsonApi, {RestfulActionsMixin} from "@/index";
-import {expect} from "@jest/globals";
-import ModelFactory from "../models/ModelFactory";
+import axios from 'axios';
+import Vue from 'vue';
+import Vuex, {Store} from 'vuex';
+import VuexORM, {Database} from '@vuex-orm/core';
+import VuexOrmJsonApi, {RestfulActionsMixin} from '@/index';
+import {expect} from '@jest/globals';
+import ModelFactory from '../models/ModelFactory';
 
 Vue.use(Vuex);
 
@@ -15,29 +15,29 @@ export function createStore(...modelNames) {
 
   const database = new Database();
 
-  Object.entries(entitiesToModels).forEach(([entity, model]) => database.register(model));
+  Object.entries(entitiesToModels).forEach(([_, model]) => database.register(model));
 
   return new Store({
     plugins: [VuexORM.install(database)],
-    strict: true
+    strict: true,
   });
 }
 
 export function createState(entities) {
   return {
-    $name: "entities",
+    $name: 'entities',
 
     ...Object.keys(entities).reduce((carry, name) => {
       const data = entities[name];
 
       carry[name] = {
-        $connection: "entities",
+        $connection: 'entities',
         $name: name,
-        data
+        data,
       };
 
       return carry;
-    }, {})
+    }, {}),
   };
 }
 

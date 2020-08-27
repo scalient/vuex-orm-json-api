@@ -1,5 +1,5 @@
-import Utils from "../Utils";
-import DocumentTransformer from "../transformers/DocumentTransformer";
+import Utils from '../Utils';
+import DocumentTransformer from '../transformers/DocumentTransformer';
 
 export default class {
   /**
@@ -30,41 +30,41 @@ export default class {
 
     if (!multiplicity) {
       if (data instanceof Array) {
-        multiplicity = "many";
+        multiplicity = 'many';
       } else if (data) {
-        multiplicity = "one";
+        multiplicity = 'one';
       } else {
-        multiplicity = "none";
+        multiplicity = 'none';
       }
     }
 
     let scope = this.config.scope;
 
     switch (multiplicity) {
-    case "many":
-      if (!(data instanceof Array) || !data) {
-        throw Utils.error("Expected an array JSON:API response, but got an object or nothing instead");
-      }
+      case 'many':
+        if (!(data instanceof Array) || !data) {
+          throw Utils.error('Expected an array JSON:API response, but got an object or nothing instead');
+        }
 
-      return await this.commitResources(database, data, included, scope);
-    case "one":
-      if (data instanceof Array || !data) {
-        throw Utils.error("Expected an object JSON:API response, but got an array or nothing instead");
-      }
+        return await this.commitResources(database, data, included, scope);
+      case 'one':
+        if (data instanceof Array || !data) {
+          throw Utils.error('Expected an object JSON:API response, but got an array or nothing instead');
+        }
 
-      return await this.commitResource(database, data, included, scope);
-    case "none":
-      if (data) {
-        throw Utils.error("Expected nothing for the JSON:API response's primary data, but got something instead");
-      }
+        return await this.commitResource(database, data, included, scope);
+      case 'none':
+        if (data) {
+          throw Utils.error('Expected nothing for the JSON:API response\'s primary data, but got something instead');
+        }
 
-      if (this.config.id) {
-        await this.deleteRecord(this.config.id);
-      }
+        if (this.config.id) {
+          await this.deleteRecord(this.config.id);
+        }
 
-      return null;
-    default:
-      throw Utils.error("Control should never reach here");
+        return null;
+      default:
+        throw Utils.error('Control should never reach here');
     }
   }
 

@@ -1,11 +1,11 @@
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import {describe, it, beforeEach, afterEach, expect} from "@jest/globals";
-import {createStore, assertState} from "spec/support/spec_helper";
-import ModelFactory from "../models/ModelFactory";
-import Utils from "../../src/Utils";
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import {describe, it, beforeEach, afterEach, expect} from '@jest/globals';
+import {createStore, assertState} from 'spec/support/spec_helper';
+import ModelFactory from '../models/ModelFactory';
+import Utils from '../../src/Utils';
 
-describe("Feature - Relation Transformers", () => {
+describe('Feature - Relation Transformers', () => {
   let mock;
 
   beforeEach(() => {
@@ -16,26 +16,26 @@ describe("Feature - Relation Transformers", () => {
     mock.reset();
   });
 
-  it("transforms the `BelongsTo` relation", async () => {
+  it('transforms the `BelongsTo` relation', async () => {
     const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
     const {users_groups: UsersGroup} = store.$db().models();
 
-    mock.onGet("/api/users_groups/1").reply(200, {
+    mock.onGet('/api/users_groups/1').reply(200, {
       data: {
         id: 1,
-        type: "users-groups",
+        type: 'users-groups',
         relationships: {
           user: {
-            data: {id: 1, type: "users"},
+            data: {id: 1, type: 'users'},
           },
           group: {
-            data: {id: 1, type: "groups"},
+            data: {id: 1, type: 'groups'},
           },
         },
       },
       included: [
-        {id: 1, type: "users", attributes: {name: "Harry Bovik"}},
-        {id: 1, type: "groups", attributes: {name: "CMU"}},
+        {id: 1, type: 'users', attributes: {name: 'Harry Bovik'}},
+        {id: 1, type: 'groups', attributes: {name: 'CMU'}},
       ],
     });
 
@@ -45,9 +45,9 @@ describe("Feature - Relation Transformers", () => {
     assertState(store, {
       users: {
         1: {
-          $id: "1",
+          $id: '1',
           id: 1,
-          name: "Harry Bovik",
+          name: 'Harry Bovik',
           users_groups: [],
           groups: [],
           user_profile: null,
@@ -57,59 +57,61 @@ describe("Feature - Relation Transformers", () => {
         },
       },
       groups: {
-        1: {$id: "1", id: 1, name: "CMU", users_groups: [], users: []},
+        1: {$id: '1', id: 1, name: 'CMU', users_groups: [], users: []},
       },
       users_groups: {
-        "[1,1]": {$id: "[1,1]", id: 1, user_id: 1, user: null, group_id: 1, group: null},
+        '[1,1]': {$id: '[1,1]', id: 1, user_id: 1, user: null, group_id: 1, group: null},
       },
       user_profiles: {},
       user_profile_attributes: {},
     });
   });
 
-  it("transforms the `HasMany` relation", async () => {
+  it('transforms the `HasMany` relation', async () => {
     const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
-    mock.onGet("/api/users/1").reply(200, {
+    mock.onGet('/api/users/1').reply(200, {
       data: {
         id: 1,
-        type: "users",
+        type: 'users',
         attributes: {
-          name: "Harry Bovik",
+          name: 'Harry Bovik',
         },
         relationships: {
-          "users-groups": {
+          'users-groups': {
             data: [
-              {id: 1, type: "users-groups"},
+              {id: 1, type: 'users-groups'},
             ],
           },
         },
       },
       included: [
         {
-          id: 1, type: "users-groups",
+          id: 1, type: 'users-groups',
           relationships: {
             group: {
-              data: {id: 1, type: "groups"},
+              data: {id: 1, type: 'groups'},
             },
           },
         },
-        {id: 1, type: "groups", attributes: {name: "CMU"}},
+        {id: 1, type: 'groups', attributes: {name: 'CMU'}},
       ],
     });
 
     await User.jsonApi().show(1);
 
-    // This is also testing `InsertionStore`'s ability to make the `UsersGroup` record available for relational
-    // manipulation by both the `User` and `Group` record, thus correctly populating the `user_id` and `group_id`
-    // attributes, thus ensuring that the `["user_id", "group_id"]` primary key can be generated.
+    /*
+     * This is also testing `InsertionStore`'s ability to make the `UsersGroup` record available for relational
+     * manipulation by both the `User` and `Group` record, thus correctly populating the `user_id` and `group_id`
+     * attributes, thus ensuring that the `["user_id", "group_id"]` primary key can be generated.
+     */
     assertState(store, {
       users: {
         1: {
-          $id: "1",
+          $id: '1',
           id: 1,
-          name: "Harry Bovik",
+          name: 'Harry Bovik',
           users_groups: [],
           groups: [],
           user_profile: null,
@@ -119,41 +121,41 @@ describe("Feature - Relation Transformers", () => {
         },
       },
       groups: {
-        1: {$id: "1", id: 1, name: "CMU", users_groups: [], users: []},
+        1: {$id: '1', id: 1, name: 'CMU', users_groups: [], users: []},
       },
       users_groups: {
-        "[1,1]": {$id: "[1,1]", id: 1, user_id: 1, user: null, group_id: 1, group: null},
+        '[1,1]': {$id: '[1,1]', id: 1, user_id: 1, user: null, group_id: 1, group: null},
       },
       user_profiles: {},
       user_profile_attributes: {},
     });
   });
 
-  it("transforms the `HasManyBy` relation", async () => {
+  it('transforms the `HasManyBy` relation', async () => {
     const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
-    mock.onGet("/api/users/1").reply(200, {
+    mock.onGet('/api/users/1').reply(200, {
       data: {
         id: 1,
-        type: "users",
+        type: 'users',
         attributes: {
-          name: "Harry Bovik",
+          name: 'Harry Bovik',
         },
         relationships: {
           embedded_groups: {
             data: [
-              {id: 1, type: "groups"},
-              {id: 2, type: "groups"},
-              {id: 3, type: "groups"},
+              {id: 1, type: 'groups'},
+              {id: 2, type: 'groups'},
+              {id: 3, type: 'groups'},
             ],
           },
         },
       },
       included: [
-        {id: 1, type: "groups", attributes: {name: "A"}},
-        {id: 2, type: "groups", attributes: {name: "B"}},
-        {id: 3, type: "groups", attributes: {name: "C"}},
+        {id: 1, type: 'groups', attributes: {name: 'A'}},
+        {id: 2, type: 'groups', attributes: {name: 'B'}},
+        {id: 3, type: 'groups', attributes: {name: 'C'}},
       ],
     });
 
@@ -162,9 +164,9 @@ describe("Feature - Relation Transformers", () => {
     assertState(store, {
       users: {
         1: {
-          $id: "1",
+          $id: '1',
           id: 1,
-          name: "Harry Bovik",
+          name: 'Harry Bovik',
           users_groups: [],
           groups: [],
           user_profile: null,
@@ -174,9 +176,9 @@ describe("Feature - Relation Transformers", () => {
         },
       },
       groups: {
-        1: {$id: "1", id: 1, name: "A", users_groups: [], users: []},
-        2: {$id: "2", id: 2, name: "B", users_groups: [], users: []},
-        3: {$id: "3", id: 3, name: "C", users_groups: [], users: []},
+        1: {$id: '1', id: 1, name: 'A', users_groups: [], users: []},
+        2: {$id: '2', id: 2, name: 'B', users_groups: [], users: []},
+        3: {$id: '3', id: 3, name: 'C', users_groups: [], users: []},
       },
       users_groups: {},
       user_profiles: {},
@@ -184,31 +186,31 @@ describe("Feature - Relation Transformers", () => {
     });
   });
 
-  it("transforms the `BelongsToMany` relation", async () => {
+  it('transforms the `BelongsToMany` relation', async () => {
     const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
-    mock.onGet("/api/users/1").reply(200, {
+    mock.onGet('/api/users/1').reply(200, {
       data: {
         id: 1,
-        type: "users",
+        type: 'users',
         attributes: {
-          name: "Harry Bovik",
+          name: 'Harry Bovik',
         },
         relationships: {
           groups: {
             data: [
-              {id: 1, type: "groups"},
-              {id: 2, type: "groups"},
-              {id: 3, type: "groups"},
+              {id: 1, type: 'groups'},
+              {id: 2, type: 'groups'},
+              {id: 3, type: 'groups'},
             ],
           },
         },
       },
       included: [
-        {id: 1, type: "groups", attributes: {name: "A"}},
-        {id: 2, type: "groups", attributes: {name: "B"}},
-        {id: 3, type: "groups", attributes: {name: "C"}},
+        {id: 1, type: 'groups', attributes: {name: 'A'}},
+        {id: 2, type: 'groups', attributes: {name: 'B'}},
+        {id: 3, type: 'groups', attributes: {name: 'C'}},
       ],
     });
 
@@ -217,9 +219,9 @@ describe("Feature - Relation Transformers", () => {
     assertState(store, {
       users: {
         1: {
-          $id: "1",
+          $id: '1',
           id: 1,
-          name: "Harry Bovik",
+          name: 'Harry Bovik',
           users_groups: [],
           groups: [],
           user_profile: null,
@@ -229,42 +231,42 @@ describe("Feature - Relation Transformers", () => {
         },
       },
       groups: {
-        1: {$id: "1", id: 1, name: "A", users_groups: [], users: []},
-        2: {$id: "2", id: 2, name: "B", users_groups: [], users: []},
-        3: {$id: "3", id: 3, name: "C", users_groups: [], users: []},
+        1: {$id: '1', id: 1, name: 'A', users_groups: [], users: []},
+        2: {$id: '2', id: 2, name: 'B', users_groups: [], users: []},
+        3: {$id: '3', id: 3, name: 'C', users_groups: [], users: []},
       },
       users_groups: {
-        "[1,1]": {$id: "[1,1]", id: null, user_id: 1, user: null, group_id: 1, group: null},
-        "[1,2]": {$id: "[1,2]", id: null, user_id: 1, user: null, group_id: 2, group: null},
-        "[1,3]": {$id: "[1,3]", id: null, user_id: 1, user: null, group_id: 3, group: null},
+        '[1,1]': {$id: '[1,1]', id: null, user_id: 1, user: null, group_id: 1, group: null},
+        '[1,2]': {$id: '[1,2]', id: null, user_id: 1, user: null, group_id: 2, group: null},
+        '[1,3]': {$id: '[1,3]', id: null, user_id: 1, user: null, group_id: 3, group: null},
       },
       user_profiles: {},
       user_profile_attributes: {},
     });
   });
 
-  it("transforms the `HasOne` relation", async () => {
+  it('transforms the `HasOne` relation', async () => {
     const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
-    mock.onGet("/api/users/1").reply(200, {
+    mock.onGet('/api/users/1').reply(200, {
       data: {
         id: 1,
-        type: "users",
+        type: 'users',
         attributes: {
-          name: "Harry Bovik",
+          name: 'Harry Bovik',
         },
         relationships: {
-          "user-profile": {
+          'user-profile': {
             data: {
               id: 1,
-              type: "user-profiles",
+              type: 'user-profiles',
             },
           },
         },
       },
       included: [
-        {id: 1, type: "user-profiles"},
+        {id: 1, type: 'user-profiles'},
       ],
     });
 
@@ -273,9 +275,9 @@ describe("Feature - Relation Transformers", () => {
     assertState(store, {
       users: {
         1: {
-          $id: "1",
+          $id: '1',
           id: 1,
-          name: "Harry Bovik",
+          name: 'Harry Bovik',
           users_groups: [],
           groups: [],
           user_profile: null,
@@ -285,7 +287,7 @@ describe("Feature - Relation Transformers", () => {
         },
       },
       user_profiles: {
-        1: {$id: "1", id: 1, user_id: 1, user: null},
+        1: {$id: '1', id: 1, user_id: 1, user: null},
       },
       groups: {},
       users_groups: {},
@@ -293,79 +295,79 @@ describe("Feature - Relation Transformers", () => {
     });
   });
 
-  it("refuses to transform the `HasManyThrough` relation", async () => {
+  it('refuses to transform the `HasManyThrough` relation', async () => {
     const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
-    mock.onGet("/api/users/1").reply(200, {
+    mock.onGet('/api/users/1').reply(200, {
       data: {
         id: 1,
-        type: "users",
+        type: 'users',
         attributes: {
-          name: "Harry Bovik",
+          name: 'Harry Bovik',
         },
         relationships: {
-          "user-profile-attributes": {
+          'user-profile-attributes': {
             data: [
               {
                 id: 1,
-                type: "user-profile-attributes",
+                type: 'user-profile-attributes',
               },
             ],
           },
         },
       },
       included: [
-        {id: 1, type: "user-profile-attributes"},
+        {id: 1, type: 'user-profile-attributes'},
       ],
     });
 
     await expect(User.jsonApi().show(1)).rejects.toThrow(
-      Utils.error("Writing directly to a `HasManyThrough` relation is not supported"),
+      Utils.error('Writing directly to a `HasManyThrough` relation is not supported'),
     );
   });
 
-  it("transforms the `morphToMany` relation", async () => {
+  it('transforms the `morphToMany` relation', async () => {
     const store = createStore(...ModelFactory.presetClusters.peopleAndInhabitables);
     const {offices: Office} = store.$db().models();
 
-    mock.onGet("/api/offices").reply(200, {
+    mock.onGet('/api/offices').reply(200, {
       data: [
         {
           id: 1,
-          type: "offices",
+          type: 'offices',
           attributes: {
-            name: "Newell Simon Hall",
+            name: 'Newell Simon Hall',
           },
           relationships: {
             people: {
               data: [
-                {id: 1, type: "people"},
-                {id: 2, type: "people"},
-                {id: 3, type: "people"},
+                {id: 1, type: 'people'},
+                {id: 2, type: 'people'},
+                {id: 3, type: 'people'},
               ],
             },
           },
         },
         {
           id: 2,
-          type: "offices",
+          type: 'offices',
           attributes: {
-            name: "Wean Hall",
+            name: 'Wean Hall',
           },
           relationships: {
             people: {
               data: [
-                {id: 3, type: "people"},
+                {id: 3, type: 'people'},
               ],
             },
           },
         },
       ],
       included: [
-        {id: 1, type: "people", attributes: {name: "Allen Newell"}},
-        {id: 2, type: "people", attributes: {name: "Herb Simon"}},
-        {id: 3, type: "people", attributes: {name: "Harry Bovik"}},
+        {id: 1, type: 'people', attributes: {name: 'Allen Newell'}},
+        {id: 2, type: 'people', attributes: {name: 'Herb Simon'}},
+        {id: 3, type: 'people', attributes: {name: 'Harry Bovik'}},
       ],
     });
 
@@ -373,29 +375,29 @@ describe("Feature - Relation Transformers", () => {
 
     assertState(store, {
       people: {
-        1: {$id: "1", id: 1, houses: [], offices: [], name: "Allen Newell"},
-        2: {$id: "2", id: 2, houses: [], offices: [], name: "Herb Simon"},
-        3: {$id: "3", id: 3, houses: [], offices: [], name: "Harry Bovik"},
+        1: {$id: '1', id: 1, houses: [], offices: [], name: 'Allen Newell'},
+        2: {$id: '2', id: 2, houses: [], offices: [], name: 'Herb Simon'},
+        3: {$id: '3', id: 3, houses: [], offices: [], name: 'Harry Bovik'},
       },
       offices: {
-        1: {$id: "1", id: 1, people: [], name: "Newell Simon Hall"},
-        2: {$id: "2", id: 2, people: [], name: "Wean Hall"},
+        1: {$id: '1', id: 1, people: [], name: 'Newell Simon Hall'},
+        2: {$id: '2', id: 2, people: [], name: 'Wean Hall'},
       },
       inhabitables: {
-        "1_1_offices": {
-          $id: "1_1_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 1,
+        '1_1_offices': {
+          $id: '1_1_offices', id: null, inhabitable_id: 1, inhabitable_type: 'offices', person_id: 1,
           inhabitable: null, person: null,
         },
-        "1_2_offices": {
-          $id: "1_2_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 2,
+        '1_2_offices': {
+          $id: '1_2_offices', id: null, inhabitable_id: 1, inhabitable_type: 'offices', person_id: 2,
           inhabitable: null, person: null,
         },
-        "1_3_offices": {
-          $id: "1_3_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 3,
+        '1_3_offices': {
+          $id: '1_3_offices', id: null, inhabitable_id: 1, inhabitable_type: 'offices', person_id: 3,
           inhabitable: null, person: null,
         },
-        "2_3_offices": {
-          $id: "2_3_offices", id: null, inhabitable_id: 2, inhabitable_type: "offices", person_id: 3,
+        '2_3_offices': {
+          $id: '2_3_offices', id: null, inhabitable_id: 2, inhabitable_type: 'offices', person_id: 3,
           inhabitable: null, person: null,
         },
       },
@@ -403,55 +405,55 @@ describe("Feature - Relation Transformers", () => {
     });
   });
 
-  it("transforms the `morphedByMany` relation", async () => {
+  it('transforms the `morphedByMany` relation', async () => {
     const store = createStore(...ModelFactory.presetClusters.peopleAndInhabitables);
     const {people: Person} = store.$db().models();
 
-    mock.onGet("/api/people").reply(200, {
+    mock.onGet('/api/people').reply(200, {
       data: [
         {
           id: 1,
-          type: "people",
+          type: 'people',
           attributes: {
-            name: "Allen Newell",
+            name: 'Allen Newell',
           },
           relationships: {
             houses: {
               data: [
-                {id: 1, type: "houses"},
+                {id: 1, type: 'houses'},
               ],
             },
             offices: {
               data: [
-                {id: 1, type: "offices"},
+                {id: 1, type: 'offices'},
               ],
             },
           },
         },
         {
           id: 2,
-          type: "people",
+          type: 'people',
           attributes: {
-            name: "Herb Simon",
+            name: 'Herb Simon',
           },
           relationships: {
             houses: {
               data: [
-                {id: 2, type: "houses"},
+                {id: 2, type: 'houses'},
               ],
             },
             offices: {
               data: [
-                {id: 1, type: "offices"},
+                {id: 1, type: 'offices'},
               ],
             },
           },
         },
       ],
       included: [
-        {id: 1, type: "houses", attributes: {name: "Allen's House"}},
-        {id: 2, type: "houses", attributes: {name: "Herb's House"}},
-        {id: 1, type: "offices", attributes: {name: "Newell Simon Hall"}},
+        {id: 1, type: 'houses', attributes: {name: 'Allen\'s House'}},
+        {id: 2, type: 'houses', attributes: {name: 'Herb\'s House'}},
+        {id: 1, type: 'offices', attributes: {name: 'Newell Simon Hall'}},
       ],
     });
 
@@ -459,56 +461,56 @@ describe("Feature - Relation Transformers", () => {
 
     assertState(store, {
       people: {
-        1: {$id: "1", id: 1, houses: [], offices: [], name: "Allen Newell"},
-        2: {$id: "2", id: 2, houses: [], offices: [], name: "Herb Simon"},
+        1: {$id: '1', id: 1, houses: [], offices: [], name: 'Allen Newell'},
+        2: {$id: '2', id: 2, houses: [], offices: [], name: 'Herb Simon'},
       },
       houses: {
-        1: {$id: "1", id: 1, people: [], name: "Allen's House"},
-        2: {$id: "2", id: 2, people: [], name: "Herb's House"},
+        1: {$id: '1', id: 1, people: [], name: 'Allen\'s House'},
+        2: {$id: '2', id: 2, people: [], name: 'Herb\'s House'},
       },
       offices: {
-        1: {$id: "1", id: 1, people: [], name: "Newell Simon Hall"},
+        1: {$id: '1', id: 1, people: [], name: 'Newell Simon Hall'},
       },
       inhabitables: {
-        "1_1_houses": {
-          $id: "1_1_houses", id: null, inhabitable_id: 1, inhabitable_type: "houses", person_id: 1,
+        '1_1_houses': {
+          $id: '1_1_houses', id: null, inhabitable_id: 1, inhabitable_type: 'houses', person_id: 1,
           inhabitable: null, person: null,
         },
-        "2_2_houses": {
-          $id: "2_2_houses", id: null, inhabitable_id: 2, inhabitable_type: "houses", person_id: 2,
+        '2_2_houses': {
+          $id: '2_2_houses', id: null, inhabitable_id: 2, inhabitable_type: 'houses', person_id: 2,
           inhabitable: null, person: null,
         },
-        "1_1_offices": {
-          $id: "1_1_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 1,
+        '1_1_offices': {
+          $id: '1_1_offices', id: null, inhabitable_id: 1, inhabitable_type: 'offices', person_id: 1,
           inhabitable: null, person: null,
         },
-        "1_2_offices": {
-          $id: "1_2_offices", id: null, inhabitable_id: 1, inhabitable_type: "offices", person_id: 2,
+        '1_2_offices': {
+          $id: '1_2_offices', id: null, inhabitable_id: 1, inhabitable_type: 'offices', person_id: 2,
           inhabitable: null, person: null,
         },
       },
     });
   });
 
-  it("transforms the `morphTo` relation", async () => {
+  it('transforms the `morphTo` relation', async () => {
     const store = createStore(...ModelFactory.presetClusters.childrenAndToysAndMonsters);
     const {toys: Toy} = store.$db().models();
 
-    mock.onGet("/api/toys/1").reply(200, {
+    mock.onGet('/api/toys/1').reply(200, {
       data: {
         id: 1,
-        type: "toys",
+        type: 'toys',
         attributes: {
-          name: "Sheriff Woody",
+          name: 'Sheriff Woody',
         },
         relationships: {
           owner: {
-            data: {id: 1, type: "children"},
+            data: {id: 1, type: 'children'},
           },
         },
       },
       included: [
-        {id: 1, type: "children", attributes: {name: "Andy"}},
+        {id: 1, type: 'children', attributes: {name: 'Andy'}},
       ],
     });
 
@@ -516,40 +518,40 @@ describe("Feature - Relation Transformers", () => {
 
     assertState(store, {
       toys: {
-        1: {$id: "1", id: 1, owner_id: 1, owner_type: "children", name: "Sheriff Woody", owner: null},
+        1: {$id: '1', id: 1, owner_id: 1, owner_type: 'children', name: 'Sheriff Woody', owner: null},
       },
       children: {
-        "1": {$id: "1", id: 1, name: "Andy", toys: [], monster_in_the_closet: null},
+        '1': {$id: '1', id: 1, name: 'Andy', toys: [], monster_in_the_closet: null},
       },
       monsters: {},
     });
   });
 
-  it("transforms the `morphMany` relation", async () => {
+  it('transforms the `morphMany` relation', async () => {
     const store = createStore(...ModelFactory.presetClusters.childrenAndToysAndMonsters);
     const {children: Child} = store.$db().models();
 
-    mock.onGet("/api/children/1").reply(200, {
+    mock.onGet('/api/children/1').reply(200, {
       data: {
         id: 1,
-        type: "children",
+        type: 'children',
         attributes: {
-          name: "Andy",
+          name: 'Andy',
         },
         relationships: {
           toys: {
             data: [
-              {id: 1, type: "toys"},
-              {id: 2, type: "toys"},
-              {id: 3, type: "toys"},
+              {id: 1, type: 'toys'},
+              {id: 2, type: 'toys'},
+              {id: 3, type: 'toys'},
             ],
           },
         },
       },
       included: [
-        {id: 1, type: "toys", attributes: {name: "Sheriff Woody"}},
-        {id: 2, type: "toys", attributes: {name: "Buzz Lightyear"}},
-        {id: 3, type: "toys", attributes: {name: "Bo Peep"}},
+        {id: 1, type: 'toys', attributes: {name: 'Sheriff Woody'}},
+        {id: 2, type: 'toys', attributes: {name: 'Buzz Lightyear'}},
+        {id: 3, type: 'toys', attributes: {name: 'Bo Peep'}},
       ],
     });
 
@@ -557,36 +559,36 @@ describe("Feature - Relation Transformers", () => {
 
     assertState(store, {
       children: {
-        "1": {$id: "1", id: 1, name: "Andy", toys: [], monster_in_the_closet: null},
+        '1': {$id: '1', id: 1, name: 'Andy', toys: [], monster_in_the_closet: null},
       },
       toys: {
-        1: {$id: "1", id: 1, owner_id: 1, owner_type: "children", name: "Sheriff Woody", owner: null},
-        2: {$id: "2", id: 2, owner_id: 1, owner_type: "children", name: "Buzz Lightyear", owner: null},
-        3: {$id: "3", id: 3, owner_id: 1, owner_type: "children", name: "Bo Peep", owner: null},
+        1: {$id: '1', id: 1, owner_id: 1, owner_type: 'children', name: 'Sheriff Woody', owner: null},
+        2: {$id: '2', id: 2, owner_id: 1, owner_type: 'children', name: 'Buzz Lightyear', owner: null},
+        3: {$id: '3', id: 3, owner_id: 1, owner_type: 'children', name: 'Bo Peep', owner: null},
       },
       monsters: {},
     });
   });
 
-  it("transforms the `morphOne` relation", async () => {
+  it('transforms the `morphOne` relation', async () => {
     const store = createStore(...ModelFactory.presetClusters.childrenAndToysAndMonsters);
     const {children: Child} = store.$db().models();
 
-    mock.onGet("/api/children/1").reply(200, {
+    mock.onGet('/api/children/1').reply(200, {
       data: {
         id: 1,
-        type: "children",
+        type: 'children',
         attributes: {
-          name: "Boo",
+          name: 'Boo',
         },
         relationships: {
-          "monster-in-the-closet": {
-            data: {id: 1, type: "monsters"},
+          'monster-in-the-closet': {
+            data: {id: 1, type: 'monsters'},
           },
         },
       },
       included: [
-        {id: 1, type: "monsters", attributes: {name: "Sully"}},
+        {id: 1, type: 'monsters', attributes: {name: 'Sully'}},
       ],
     });
 
@@ -594,10 +596,10 @@ describe("Feature - Relation Transformers", () => {
 
     assertState(store, {
       children: {
-        "1": {$id: "1", id: 1, name: "Boo", toys: [], monster_in_the_closet: null},
+        '1': {$id: '1', id: 1, name: 'Boo', toys: [], monster_in_the_closet: null},
       },
       monsters: {
-        1: {$id: "1", id: 1, scaree_id: 1, scaree_type: "children", name: "Sully", scaree: null},
+        1: {$id: '1', id: 1, scaree_id: 1, scaree_type: 'children', name: 'Sully', scaree: null},
       },
       toys: {},
     });

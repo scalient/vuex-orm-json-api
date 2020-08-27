@@ -1,4 +1,4 @@
-import FieldTransformer from "./FieldTransformer";
+import FieldTransformer from './FieldTransformer';
 
 export default class extends FieldTransformer {
   constructor(name, attribute, _config = {}) {

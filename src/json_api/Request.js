@@ -1,5 +1,5 @@
-import Utils from "../Utils";
-import Response from "./Response";
+import Utils from '../Utils';
+import Response from './Response';
 
 export default class {
   /**
@@ -14,7 +14,7 @@ export default class {
    */
   get axios() {
     if (!this.model.axios) {
-      return Utils.error("The axios instance is not registered. Please register the axios instance to the model.");
+      return Utils.error('The axios instance is not registered. Please register the axios instance to the model.');
     }
 
     return this.model.axios;
@@ -27,7 +27,7 @@ export default class {
     return this.request({
       ...this.model.globalJsonApiConfig,
       ...this.model.jsonApiConfig,
-      method: "get", url,
+      method: 'get', url,
       ...config,
     });
   }
@@ -39,7 +39,7 @@ export default class {
     return this.request({
       ...this.model.globalJsonApiConfig,
       ...this.model.jsonApiConfig,
-      method: "post", url, data,
+      method: 'post', url, data,
       ...config,
     });
   }
@@ -51,7 +51,7 @@ export default class {
     return this.request({
       ...this.model.globalJsonApiConfig,
       ...this.model.jsonApiConfig,
-      method: "put", url, data,
+      method: 'put', url, data,
       ...config,
     });
   }
@@ -63,7 +63,7 @@ export default class {
     return this.request({
       ...this.model.globalJsonApiConfig,
       ...this.model.jsonApiConfig,
-      method: "patch", url, data,
+      method: 'patch', url, data,
       ...config,
     });
   }
@@ -75,7 +75,7 @@ export default class {
     return this.request({
       ...this.model.globalJsonApiConfig,
       ...this.model.jsonApiConfig,
-      method: "delete", url,
+      method: 'delete', url,
       ...config,
     });
   }

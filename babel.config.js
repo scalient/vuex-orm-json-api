@@ -1,19 +1,19 @@
 module.exports = {
-  presets: ["@babel/preset-env"],
+  presets: ['@babel/preset-env'],
   plugins: [
     [
-      require("@babel/plugin-proposal-class-properties").default,
+      require('@babel/plugin-proposal-class-properties').default,
       {
-        loose: true
-      }
+        loose: true,
+      },
     ],
     [
-      require("@babel/plugin-transform-runtime").default,
+      require('@babel/plugin-transform-runtime').default,
       {
         helpers: false,
         regenerator: true,
-        corejs: false
-      }
-    ]
-  ]
+        corejs: false,
+      },
+    ],
+  ],
 };

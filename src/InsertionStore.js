@@ -23,7 +23,7 @@ export default class {
     let record = records[id];
 
     if (!record) {
-      record = {type: type, isPrimary: false, data: {[localKey ? localKey : "id"]: id}};
+      record = {type: type, isPrimary: false, data: {[localKey ? localKey : 'id']: id}};
       records[id] = record;
     }
 

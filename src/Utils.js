@@ -1,5 +1,5 @@
-import {PROJECT_NAME_HUMANIZED} from "./constants";
-import JsonApiError from "./JsonApiError";
+import {PROJECT_NAME_HUMANIZED} from './constants';
+import JsonApiError from './JsonApiError';
 
 export default class {
   static error(message) {

@@ -1,5 +1,5 @@
-import InsertionStore from "../InsertionStore";
-import Utils from "../Utils";
+import InsertionStore from '../InsertionStore';
+import Utils from '../Utils';
 
 export default class {
   constructor(database, config) {
@@ -29,7 +29,7 @@ export default class {
       let primaryRecords = insertionStore.recordQueue.filter((record) => record.isPrimary);
 
       if (primaryRecords.length !== 1) {
-        throw Utils.error("Expected singleton array for pre-insertion records");
+        throw Utils.error('Expected singleton array for pre-insertion records');
       }
 
       return {
@@ -47,8 +47,10 @@ export default class {
     let localKey = model.localKey();
     let record = insertionStore.fetchRecord(type, resourceId, localKey);
 
-    // This record may have started life as non-primary, and the `DocumentTransformer` has the authoritative say on
-    // whether it is primary.
+    /*
+     * This record may have started life as non-primary, and the `DocumentTransformer` has the authoritative say on
+     * whether it is primary.
+     */
     record.isPrimary = isPrimary;
 
     model.jsonApiTransformer.transform(data, record.data, insertionStore);

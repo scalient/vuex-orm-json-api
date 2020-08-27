@@ -1,4 +1,4 @@
-import VuexOrmJsonApi from "./VuexOrmJsonApi";
+import VuexOrmJsonApi from './VuexOrmJsonApi';
 
 export default class {
   static install(components, config) {
@@ -6,4 +6,4 @@ export default class {
   }
 }
 
-export {default as RestfulActionsMixin} from "./mixins/RestfulActionsMixin";
+export {default as RestfulActionsMixin} from './mixins/RestfulActionsMixin';

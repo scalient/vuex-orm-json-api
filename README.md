@@ -99,7 +99,7 @@ class User extends Model {
       id: this.attr(null),
       name: this.attr(null),
 
-      groups: this.belongsToMany(Group, UsersGroup, "user_id", "group_id")
+      groups: this.belongsToMany(Group, UsersGroup, "user_id", "group_id"),
     };
   }
 }
@@ -112,7 +112,7 @@ class Group extends Model {
       id: this.attr(null),
       name: this.attr(null),
 
-      users: this.belongsToMany(User, UsersGroup, "group_id", "user_id")
+      users: this.belongsToMany(User, UsersGroup, "group_id", "user_id"),
     };
   }
 }
@@ -125,7 +125,7 @@ class UsersGroup extends Model {
   static fields() {
     return {
       user_id: this.attr(null),
-      group_id: this.attr(null)
+      group_id: this.attr(null),
     };
   }
 }
@@ -144,21 +144,21 @@ and receiving the response
 {
   data: {
     id: 1,
-    type: "users",
+    type: 'users',
     attributes: {
-      name: "Harry Bovik"
+      name: 'Harry Bovik',
     },
     relationships: {
       groups: {
         data: [
-          {id: 1, type: "groups"}
-        ]
-      }
-    }
+          {id: 1, type: 'groups'},
+        ],
+      },
+    },
   },
   included: [
-    {id: 1, type: "groups", attributes: {name: "CMU"}}
-  ]
+    {id: 1, type: 'groups', attributes: {name: 'CMU'}},
+  ],
 }
 ```
 
@@ -167,14 +167,14 @@ the state of the Vuex store is what we would expect, composite primary keys and 
 ```
 {
   users: {
-    1: {$id: "1", id: 1, name: "Harry Bovik", groups: []}
+    1: {$id: '1', id: 1, name: 'Harry Bovik', users_groups: [], groups: []},
   },
   groups: {
-    1: {$id: "1", id: 1, name: "CMU", users: []},
+    1: {$id: '1', id: 1, name: 'CMU', users_groups: [], users: []},
   },
   users_groups: {
-    "[1,1]": {$id: "[1,1]", user_id: 1, user: null, group_id: 1, group: null}
-  }
+    '[1,1]': {$id: '[1,1]', id: null, user_id: 1, user: null, group_id: 1, group: null},
+  },
 }
 ```
 
@@ -191,7 +191,7 @@ class Monster extends Model {
 
       scaree_id: this.attr(null),
       scaree_type: this.attr(null),
-      scaree: this.morphTo("scaree_id", "scaree_type")
+      scaree: this.morphTo("scaree_id", "scaree_type"),
     };
   }
 }
@@ -204,7 +204,7 @@ class Child extends Model {
       id: this.attr(null),
       name: this.attr(null),
 
-      monster_in_the_closet: this.morphOne(Monster, "scaree_id", "scaree_type")
+      monster_in_the_closet: this.morphOne(Monster, "scaree_id", "scaree_type"),
     };
   }
 }
@@ -222,19 +222,19 @@ and receiving the response
 {
   data: {
     id: 1,
-    type: "children",
+    type: 'children',
     attributes: {
-      name: "Boo"
+      name: 'Boo',
     },
     relationships: {
-      "monster-in-the-closet": {
-        data: {id: 1, type: "monsters"}
-      }
-    }
+      'monster-in-the-closet': {
+        data: {id: 1, type: 'monsters'},
+      },
+    },
   },
   included: [
-    {id: 1, type: "monsters", attributes: {name: "Sully"}}
-  ]
+    {id: 1, type: 'monsters', attributes: {name: 'Sully'}},
+  ],
 }
 ```
 

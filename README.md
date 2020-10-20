@@ -105,7 +105,7 @@ class User extends Model {
 }
 
 class Group extends Model {
-  static entity = "users"
+  static entity = "groups"
 
   static fields() {
     return {

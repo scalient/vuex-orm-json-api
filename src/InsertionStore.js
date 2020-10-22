@@ -5,7 +5,7 @@
 export default class {
   constructor() {
     this.typesToIdsToRecords = {};
-    this.recordQueue = [];
+    this.records = new Set();
   }
 
   /*
@@ -27,8 +27,16 @@ export default class {
       records[id] = record;
     }
 
-    this.recordQueue.push(record);
+    // Sets provide duplicate protection and enumerate elements in insertion order, which is what we need.
+    this.records.add(record);
 
     return record;
+  }
+
+  /**
+   * Converts the underlying set of records to an array.
+   */
+  toArray() {
+    return [...this.records];
   }
 }

@@ -20,13 +20,15 @@ export default class {
     let includedData = data.included || [];
     includedData.forEach((data) => this.transformResource(data, insertionStore, false));
 
+    let records = insertionStore.toArray();
+
     if (primaryData instanceof Array) {
       return {
-        data: insertionStore.recordQueue.filter((record) => record.isPrimary),
-        included: insertionStore.recordQueue.filter((record) => !record.isPrimary),
+        data: records.filter((record) => record.isPrimary),
+        included: records.filter((record) => !record.isPrimary),
       };
     } else {
-      let primaryRecords = insertionStore.recordQueue.filter((record) => record.isPrimary);
+      let primaryRecords = records.filter((record) => record.isPrimary);
 
       if (primaryRecords.length !== 1) {
         throw Utils.error('Expected singleton array for pre-insertion records');
@@ -34,7 +36,7 @@ export default class {
 
       return {
         data: primaryRecords[0],
-        included: insertionStore.recordQueue.filter((record) => !record.isPrimary),
+        included: records.filter((record) => !record.isPrimary),
       };
     }
   }

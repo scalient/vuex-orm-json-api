@@ -14,10 +14,9 @@ export default class extends RelationTransformer {
 
     let parentModel = this.relation.parent;
     let foreignKey = this.relation.foreignKey;
-    let expectedType = parentModel.entity;
     let {type: resourceType, id} = data;
 
-    this.constructor.checkType(this.resourceToEntityCase(resourceType), expectedType);
+    this.constructor.checkType(this.resourceToEntityCase(resourceType), parentModel);
 
     // See `https://vuex-orm.org/guide/model/relationships.html#one-to-one-inverse`.
     output[this.name] = {[parentModel.localKey()]: id};

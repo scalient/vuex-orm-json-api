@@ -11,7 +11,6 @@ export default class extends RelationTransformer {
     let polymorphicIdKey = this.relation.id;
     let polymorphicTypeKey = this.relation.type;
     let relatedLocalKey = relatedModel.localKey();
-    let expectedType = relatedModel.entity;
 
     /*
      * See `https://vuex-orm.org/guide/model/relationships.html#one-to-many`,
@@ -21,7 +20,7 @@ export default class extends RelationTransformer {
     output[this.name] = data.map(({type: resourceType, id}) => {
       let type = this.resourceToEntityCase(resourceType);
 
-      this.constructor.checkType(type, expectedType);
+      this.constructor.checkType(type, relatedModel);
 
       /*
        * Don't proceed if a pivot model is present; in other words, process direct relations and not "through"

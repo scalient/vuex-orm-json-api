@@ -4,11 +4,11 @@ export default class extends RelationTransformer {
   transform(data, output) {
     this.constructor.checkMany(data);
 
-    let expectedType = this.relation.parent.entity;
+    let parentModel = this.relation.parent;
 
     // See `https://vuex-orm.org/guide/model/relationships.html#has-many-by`.
     output[this.relation.foreignKey] = data.map(({type: resourceType, id}) => {
-      this.constructor.checkType(this.resourceToEntityCase(resourceType), expectedType);
+      this.constructor.checkType(this.resourceToEntityCase(resourceType), parentModel);
 
       return id;
     });

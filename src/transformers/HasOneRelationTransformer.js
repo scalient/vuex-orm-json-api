@@ -14,7 +14,6 @@ export default class extends RelationTransformer {
 
     let relatedModel = this.relation.related;
     let relatedLocalKey = relatedModel.localKey();
-    let expectedType = relatedModel.entity;
     let {type: resourceType, id} = data;
 
     /*
@@ -25,7 +24,7 @@ export default class extends RelationTransformer {
 
     let type = this.resourceToEntityCase(resourceType);
 
-    this.constructor.checkType(type, expectedType);
+    this.constructor.checkType(type, relatedModel);
 
     if (insertionStore) {
       /*

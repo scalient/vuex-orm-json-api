@@ -14,9 +14,15 @@ export default class extends FieldTransformer {
     throw Utils.error('Method not implemented');
   }
 
-  static checkType(type, expectedType) {
-    if (type !== expectedType) {
-      throw Utils.error(`Expected type \`${expectedType}\` but got \`${type}\` in relation`);
+  static checkType(type, expectedModel) {
+    const expectedType = expectedModel.entity;
+    const expectedBaseType = expectedModel.baseEntity;
+
+    if (type !== expectedType && type !== expectedBaseType) {
+      throw Utils.error(
+        `Expected type \`${expectedType}\` ` +
+        `${expectedBaseType ? `or base type \`${expectedBaseType}\` ` : ''}but got \`${type}\` in relation`,
+      );
     }
   }
 

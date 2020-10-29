@@ -1,4 +1,7 @@
 vuex-orm-json-api
 Copyright 2020 Roy Liu
 
-... with components from the plugin-axios project (see `licenses/plugin-axios.txt`).
+... with components from:
+
+* plugin-axios (see `licenses/plugin-axios.txt`).
+* javascript-algorithms (see `licenses/javascript-algorithms.txt`).

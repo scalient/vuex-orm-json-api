@@ -1,16 +1,18 @@
 export default class {
   static initialize({monsters}) {
-    monsters.entity = 'monsters';
+    Object.assign(monsters, {
+      entity: 'monsters',
 
-    monsters.fields = function () {
-      return {
-        id: this.attr(null),
-        name: this.attr(null),
+      fields() {
+        return {
+          id: this.attr(null),
+          name: this.attr(null),
 
-        scaree_id: this.attr(null),
-        scaree_type: this.attr(null),
-        scaree: this.morphTo('scaree_id', 'scaree_type'),
-      };
-    };
+          scaree_id: this.attr(null),
+          scaree_type: this.attr(null),
+          scaree: this.morphTo('scaree_id', 'scaree_type'),
+        };
+      },
+    });
   }
 }

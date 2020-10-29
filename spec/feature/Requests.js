@@ -18,7 +18,7 @@ describe('Feature - Requests', () => {
 
   // This isn't actually testing vuex-orm-json-api, but it's demonstrating how validation errors might be handled.
   it('throws an Axios request error with JSON:API error objects', async () => {
-    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
     const payload = {
@@ -44,7 +44,7 @@ describe('Feature - Requests', () => {
   });
 
   it('throws a `JsonApiError` when a model can\'t be found', async () => {
-    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
     mock.onGet('/api/users').reply(200, {

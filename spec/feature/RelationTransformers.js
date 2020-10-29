@@ -17,7 +17,7 @@ describe('Feature - Relation Transformers', () => {
   });
 
   it('transforms the `BelongsTo` relation', async () => {
-    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
     const {users_groups: UsersGroup} = store.$db().models();
 
     mock.onGet('/api/users_groups/1').reply(200, {
@@ -68,7 +68,7 @@ describe('Feature - Relation Transformers', () => {
   });
 
   it('transforms the `HasMany` relation', async () => {
-    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
     mock.onGet('/api/users/1').reply(200, {
@@ -132,7 +132,7 @@ describe('Feature - Relation Transformers', () => {
   });
 
   it('transforms the `HasManyBy` relation', async () => {
-    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
     mock.onGet('/api/users/1').reply(200, {
@@ -187,7 +187,7 @@ describe('Feature - Relation Transformers', () => {
   });
 
   it('transforms the `BelongsToMany` relation', async () => {
-    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
     mock.onGet('/api/users/1').reply(200, {
@@ -246,7 +246,7 @@ describe('Feature - Relation Transformers', () => {
   });
 
   it('transforms the `HasOne` relation', async () => {
-    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
     mock.onGet('/api/users/1').reply(200, {
@@ -296,7 +296,7 @@ describe('Feature - Relation Transformers', () => {
   });
 
   it('refuses to transform the `HasManyThrough` relation', async () => {
-    const store = createStore(...ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
     const {users: User} = store.$db().models();
 
     mock.onGet('/api/users/1').reply(200, {
@@ -328,7 +328,7 @@ describe('Feature - Relation Transformers', () => {
   });
 
   it('transforms the `morphToMany` relation', async () => {
-    const store = createStore(...ModelFactory.presetClusters.peopleAndInhabitables);
+    const store = createStore(ModelFactory.presetClusters.peopleAndInhabitables);
     const {offices: Office} = store.$db().models();
 
     mock.onGet('/api/offices').reply(200, {
@@ -406,7 +406,7 @@ describe('Feature - Relation Transformers', () => {
   });
 
   it('transforms the `morphedByMany` relation', async () => {
-    const store = createStore(...ModelFactory.presetClusters.peopleAndInhabitables);
+    const store = createStore(ModelFactory.presetClusters.peopleAndInhabitables);
     const {people: Person} = store.$db().models();
 
     mock.onGet('/api/people').reply(200, {
@@ -493,7 +493,7 @@ describe('Feature - Relation Transformers', () => {
   });
 
   it('transforms the `morphTo` relation', async () => {
-    const store = createStore(...ModelFactory.presetClusters.childrenAndToysAndMonsters);
+    const store = createStore(ModelFactory.presetClusters.childrenAndToysAndMonsters);
     const {toys: Toy} = store.$db().models();
 
     mock.onGet('/api/toys/1').reply(200, {
@@ -528,7 +528,7 @@ describe('Feature - Relation Transformers', () => {
   });
 
   it('transforms the `morphMany` relation', async () => {
-    const store = createStore(...ModelFactory.presetClusters.childrenAndToysAndMonsters);
+    const store = createStore(ModelFactory.presetClusters.childrenAndToysAndMonsters);
     const {children: Child} = store.$db().models();
 
     mock.onGet('/api/children/1').reply(200, {
@@ -571,7 +571,7 @@ describe('Feature - Relation Transformers', () => {
   });
 
   it('transforms the `morphOne` relation', async () => {
-    const store = createStore(...ModelFactory.presetClusters.childrenAndToysAndMonsters);
+    const store = createStore(ModelFactory.presetClusters.childrenAndToysAndMonsters);
     const {children: Child} = store.$db().models();
 
     mock.onGet('/api/children/1').reply(200, {

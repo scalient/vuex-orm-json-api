@@ -13,6 +13,7 @@ import adults_initializer from './AdultsInitializer';
 import children_initializer from './ChildrenInitializer';
 import toys_initializer from './ToysInitializer';
 import monsters_initializer from './MonstersInitializer';
+import meetings_initializer from './MeetingsInitializer';
 
 export default class {
   static initializers = {
@@ -29,6 +30,7 @@ export default class {
     children_initializer,
     toys_initializer,
     monsters_initializer,
+    meetings_initializer,
   };
 
   static presets = {
@@ -45,6 +47,7 @@ export default class {
     children: 'people',
     toys: null,
     monsters: null,
+    meetings: null,
   }
 
   static createDatabase(entitiesToBaseEntities) {

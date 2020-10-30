@@ -72,14 +72,6 @@ module.exports = {
       'error',
       'unix',
     ],
-    /*
-     * This is a multiline starred block comment. This is a multiline starred block comment. This is a multiline starred
-     * block comment. This is a multiline starred block comment. This is a multiline starred block comment. This is a...
-     */
-    'multiline-comment-style': [
-      'error',
-      'starred-block',
-    ],
     /* Helps the user identify stray `console.log`s. */
     'no-console': [
       'error',

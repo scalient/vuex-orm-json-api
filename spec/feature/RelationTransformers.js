@@ -330,9 +330,9 @@ describe('Feature - Relation Transformers', () => {
           relationships: {
             people: {
               data: [
-                {id: 1, type: 'adults'},
-                {id: 2, type: 'adults'},
-                {id: 3, type: 'adults'},
+                {id: 1, type: 'people'},
+                {id: 2, type: 'people'},
+                {id: 3, type: 'people'},
               ],
             },
           },
@@ -346,16 +346,16 @@ describe('Feature - Relation Transformers', () => {
           relationships: {
             people: {
               data: [
-                {id: 3, type: 'adults'},
+                {id: 3, type: 'people'},
               ],
             },
           },
         },
       ],
       included: [
-        {id: 1, type: 'adults', attributes: {name: 'Allen Newell'}},
-        {id: 2, type: 'adults', attributes: {name: 'Herb Simon'}},
-        {id: 3, type: 'adults', attributes: {name: 'Harry Bovik'}},
+        {id: 1, type: 'people', attributes: {name: 'Allen Newell'}},
+        {id: 2, type: 'people', attributes: {name: 'Herb Simon'}},
+        {id: 3, type: 'people', attributes: {name: 'Harry Bovik'}},
       ],
     });
 
@@ -363,9 +363,9 @@ describe('Feature - Relation Transformers', () => {
 
     assertState(store, {
       people: {
-        1: {$id: '1', id: 1, houses: [], offices: [], name: 'Allen Newell'},
-        2: {$id: '2', id: 2, houses: [], offices: [], name: 'Herb Simon'},
-        3: {$id: '3', id: 3, houses: [], offices: [], name: 'Harry Bovik'},
+        1: {$id: '1', id: 1, type: null, name: 'Allen Newell'},
+        2: {$id: '2', id: 2, type: null, name: 'Herb Simon'},
+        3: {$id: '3', id: 3, type: null, name: 'Harry Bovik'},
       },
       offices: {
         1: {$id: '1', id: 1, people: [], name: 'Newell Simon Hall'},

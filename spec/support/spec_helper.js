@@ -17,12 +17,12 @@ export function createStore(entitiesToBaseEntities) {
   });
 }
 
-export function createState(entities) {
+export function createState(entitiesToData) {
   return {
     $name: 'entities',
 
-    ...Object.keys(entities).reduce((carry, name) => {
-      const data = entities[name];
+    ...Object.keys(entitiesToData).reduce((carry, name) => {
+      const data = entitiesToData[name];
 
       carry[name] = {
         $connection: 'entities',
@@ -35,6 +35,16 @@ export function createState(entities) {
   };
 }
 
-export function assertState(store, entities) {
-  expect(store.state.entities).toEqual(createState(entities));
+export function assertState(store, entitiesToData) {
+  let missingEntitiesToData = Object.fromEntries(
+    Object.
+      keys(store.state.entities).
+      filter(entity => !Object.prototype.hasOwnProperty.call(entitiesToData, entity)).map(entity => [entity, {}]),
+  );
+
+  // Excise the special `$name` property.
+  let {['$name']: _, ...remaining} = missingEntitiesToData;
+  missingEntitiesToData = remaining;
+
+  expect(store.state.entities).toEqual(createState({...entitiesToData, ...missingEntitiesToData}));
 }

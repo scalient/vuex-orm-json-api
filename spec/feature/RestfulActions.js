@@ -17,7 +17,7 @@ describe('Feature - RESTful Actions', () => {
   });
 
   it('runs the `index` action', async () => {
-    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presets);
     const {users: User} = store.$db().models();
 
     mock.onGet('/api/users').reply(200, {
@@ -110,7 +110,7 @@ describe('Feature - RESTful Actions', () => {
   });
 
   it('runs the `show` action', async () => {
-    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presets);
     const {users: User} = store.$db().models();
 
     mock.onGet('/api/users/1').reply(200, {
@@ -153,7 +153,7 @@ describe('Feature - RESTful Actions', () => {
   });
 
   it('runs the `create` action', async () => {
-    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presets);
     const {users: User} = store.$db().models();
 
     const payload = {
@@ -204,7 +204,7 @@ describe('Feature - RESTful Actions', () => {
   });
 
   it('runs the `update` action', async () => {
-    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presets);
     const {users: User} = store.$db().models();
 
     User.insertOrUpdate({
@@ -262,7 +262,7 @@ describe('Feature - RESTful Actions', () => {
   });
 
   it('runs the `destroy` action', async () => {
-    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presets);
     const {users: User} = store.$db().models();
 
     User.insertOrUpdate({
@@ -305,7 +305,7 @@ describe('Feature - RESTful Actions', () => {
   });
 
   it('throws an error when expected multiplicity is one', async () => {
-    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presets);
     const {users: User} = store.$db().models();
 
     mock.onGet('/api/users/1').reply(200, {
@@ -322,7 +322,7 @@ describe('Feature - RESTful Actions', () => {
   });
 
   it('throws an error when expected multiplicity is many', async () => {
-    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presets);
     const {users: User} = store.$db().models();
 
     mock.onGet('/api/users').reply(200, {
@@ -337,7 +337,7 @@ describe('Feature - RESTful Actions', () => {
   });
 
   it('applies a user-defined query scope', async () => {
-    const store = createStore(ModelFactory.presetClusters.usersAndGroups);
+    const store = createStore(ModelFactory.presets);
     const {users: User} = store.$db().models();
 
     mock.onGet('/api/users/1').reply(200, {

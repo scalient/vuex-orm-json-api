@@ -4,7 +4,7 @@ import ModelFactory from '../models/ModelFactory';
 
 describe('Feature - Vuex ORM JSON:API', () => {
   it('mixes the adapter\'s configuration into models', () => {
-    let store = createStore(ModelFactory.presetClusters.usersAndGroups);
+    let store = createStore(ModelFactory.presets);
     let {users: User} = store.$db().models();
 
     expect(User).toHaveProperty('setAxios');

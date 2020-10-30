@@ -9,6 +9,7 @@ import people_initializer from './PeopleInitializer';
 import inhabitables_initializer from './InhabitablesInitializer';
 import houses_initializer from './HousesInitializer';
 import offices_initializer from './OfficesInitializer';
+import adults_initializer from './AdultsInitializer';
 import children_initializer from './ChildrenInitializer';
 import toys_initializer from './ToysInitializer';
 import monsters_initializer from './MonstersInitializer';
@@ -24,33 +25,26 @@ export default class {
     inhabitables_initializer,
     houses_initializer,
     offices_initializer,
+    adults_initializer,
     children_initializer,
     toys_initializer,
     monsters_initializer,
   };
 
-  static presetClusters = {
-    // Used to test the `BelongsTo`, `HasMany`, `HasManyBy`, `BelongsToMany`, `HasOne`, and `HasManyThrough` relations.
-    usersAndGroups: {
-      users: null,
-      groups: null,
-      users_groups: null,
-      user_profiles: null,
-      user_profile_attributes: null,
-    },
-    // Used to test the `MorphToMany` and `MorphedByMany` relations.
-    peopleAndInhabitables: {
-      people: null,
-      inhabitables: null,
-      houses: null,
-      offices: null,
-    },
-    // Used to test the `MorphTo`, `MorphMany`, and `MorphOne` relations.
-    childrenAndToysAndMonsters: {
-      children: null,
-      toys: null,
-      monsters: null,
-    },
+  static presets = {
+    users: null,
+    groups: null,
+    users_groups: null,
+    user_profiles: null,
+    user_profile_attributes: null,
+    people: null,
+    inhabitables: null,
+    houses: null,
+    offices: null,
+    adults: 'people',
+    children: 'people',
+    toys: null,
+    monsters: null,
   }
 
   static createDatabase(entitiesToBaseEntities) {

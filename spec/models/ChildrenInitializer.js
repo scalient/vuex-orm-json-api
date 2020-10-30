@@ -1,12 +1,12 @@
 export default class {
-  static initialize({children, toys, monsters}) {
+  static initialize({children, people, toys, monsters}) {
     Object.assign(children, {
       entity: 'children',
+      baseEntity: 'people',
 
       fields() {
         return {
-          id: this.attr(null),
-          name: this.attr(null),
+          ...people.fields(),
 
           toys: this.morphMany(toys, 'owner_id', 'owner_type'),
 

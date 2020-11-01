@@ -102,7 +102,7 @@ describe('Feature - Relation Transformers', () => {
     /*
      * This is also testing `InsertionStore`'s ability to make the `UsersGroup` record available for relational
      * manipulation by both the `User` and `Group` record, thus correctly populating the `user_id` and `group_id`
-     * attributes, thus ensuring that the `["user_id", "group_id"]` primary key can be generated.
+     * attributes, thus ensuring that the `['user_id', 'group_id']` primary key can be generated.
      */
     assertState(store, {
       users: {

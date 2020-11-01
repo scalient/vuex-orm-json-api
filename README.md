@@ -22,9 +22,9 @@ Vuex ORM analogues of records, attributes, and relations. Also included are REST
 2.  Importing the plugin:
 
     ```
-    import axios from "axios";
-    import VuexORM from "@vuex-orm/core";
-    import VuexOrmJsonApi, {RestfulActionsMixin} from "vuex-orm-json-api";
+    import axios from 'axios';
+    import VuexORM from '@vuex-orm/core';
+    import VuexOrmJsonApi, {RestfulActionsMixin} from 'vuex-orm-json-api';
     
     VuexORM.use(VuexOrmJsonApi, {axios, mixins: [RestfulActionsMixin]});
     ```
@@ -36,8 +36,8 @@ Assuming that you've included the `RestfulActionsMixin`, the adapter supports fi
 ```
 User.jsonApi().index();                             // Get all users.
 User.jsonApi().show(1);                             // Get user 1.
-User.jsonApi().create({name: "Harry Bovik"});       // Create a user.
-User.jsonApi().update(1, {name: "Harry Q. Bovik"}); // Update user 1.
+User.jsonApi().create({name: 'Harry Bovik'});       // Create a user.
+User.jsonApi().update(1, {name: 'Harry Q. Bovik'}); // Update user 1.
 User.jsonApi().destroy(1);                          // Destroy user 1.
 ```
 
@@ -53,7 +53,7 @@ Some considerations:
 *   You may pass in a `scope` function to qualify returned records further. For example:
 
     ```
-    await User.jsonApi().show(1, {scope: (query) => query.with("users.group")});
+    await User.jsonApi().show(1, {scope: (query) => query.with('users.group')});
     ```
 
     Additional overridable options include `url` and `method`.
@@ -63,7 +63,7 @@ Some considerations:
 The adapter may be configured at installation time
 
 ```
-VuexORM.use(VuexOrmJsonApi, {axios, mixins: [RestfulActionsMixin], apiRoot: "/"});
+VuexORM.use(VuexOrmJsonApi, {axios, mixins: [RestfulActionsMixin], apiRoot: '/'});
 ```
 
 or at the model level:
@@ -71,7 +71,7 @@ or at the model level:
 ```
 class User extends Model {
   static jsonApiConfig = {
-    apiRoot: "/"
+    apiRoot: '/'
   }
 }
 ```
@@ -92,35 +92,35 @@ documents into insertion-ready data. Consider the following models:
 
 ```
 class User extends Model {
-  static entity = "users"
+  static entity = 'users'
 
   static fields() {
     return {
       id: this.attr(null),
       name: this.attr(null),
 
-      groups: this.belongsToMany(Group, UsersGroup, "user_id", "group_id"),
+      groups: this.belongsToMany(Group, UsersGroup, 'user_id', 'group_id'),
     };
   }
 }
 
 class Group extends Model {
-  static entity = "groups"
+  static entity = 'groups'
 
   static fields() {
     return {
       id: this.attr(null),
       name: this.attr(null),
 
-      users: this.belongsToMany(User, UsersGroup, "group_id", "user_id"),
+      users: this.belongsToMany(User, UsersGroup, 'group_id', 'user_id'),
     };
   }
 }
 
 class UsersGroup extends Model {
-  static entity = "users_groups"
+  static entity = 'users_groups'
 
-  static primaryKey = ["user_id", "group_id"]
+  static primaryKey = ['user_id', 'group_id']
 
   static fields() {
     return {
@@ -182,7 +182,7 @@ The JSON:API specification allows for self-describing, intrinsically polymorphic
 
 ```
 class Monster extends Model {
-  static entity = "monsters"
+  static entity = 'monsters'
 
   static fields() {
     return {
@@ -191,20 +191,20 @@ class Monster extends Model {
 
       scaree_id: this.attr(null),
       scaree_type: this.attr(null),
-      scaree: this.morphTo("scaree_id", "scaree_type"),
+      scaree: this.morphTo('scaree_id', 'scaree_type'),
     };
   }
 }
 
 class Child extends Model {
-  static entity = "children"
+  static entity = 'children'
 
   static fields() {
     return {
       id: this.attr(null),
       name: this.attr(null),
 
-      monster_in_the_closet: this.morphOne(Monster, "scaree_id", "scaree_type"),
+      monster_in_the_closet: this.morphOne(Monster, 'scaree_id', 'scaree_type'),
     };
   }
 }
@@ -241,7 +241,7 @@ and receiving the response
 the query
 
 ```
-Child.query().whereId(1).with("monster_in_the_closet").first();
+Child.query().whereId(1).with('monster_in_the_closet').first();
 ```
 
 will return Boo along with her monster friend Sully.

@@ -1,4 +1,5 @@
 import RelationTransformer from './RelationTransformer';
+import Utils from '../Utils';
 
 export default class extends RelationTransformer {
   transform(data, output, selfId = null, insertionStore = null) {
@@ -26,23 +27,50 @@ export default class extends RelationTransformer {
        * Don't proceed if a pivot model is present; in other words, process direct relations and not "through"
        * relations.
        */
-      if (!pivot && insertionStore) {
-        /*
-         * Instead of creating an embedded record, defer to the `InsertionStore` and make this record visible to later
-         * JSON:API resources.
-         */
-        let record = insertionStore.fetchRecord(type, id, relatedLocalKey);
-        let data = record.data;
+      if (insertionStore) {
+        if (!pivot) {
+          /*
+           * Instead of creating an embedded record, defer to the `InsertionStore` and make this record visible to later
+           * JSON:API resources.
+           */
+          let record = insertionStore.fetchRecord(type, id, relatedLocalKey);
+          let data = record.data;
 
-        // Fill in the inverse side of this relation.
-        if (!this.isPolymorphic) {
-          data[foreignKey] = selfId;
+          // Fill in the inverse side of this relation.
+          if (!this.isPolymorphic) {
+            data[foreignKey] = selfId;
+          } else {
+            data[polymorphicIdKey] = selfId;
+            data[polymorphicTypeKey] = selfType;
+          }
+
+          return null;
         } else {
-          data[polymorphicIdKey] = selfId;
-          data[polymorphicTypeKey] = selfType;
-        }
+          /**
+           * Important: Since JSON:API resources contain type information, we want to preserve that even when pivot
+           * models are involved. This means looking up the base model and doing a reverse lookup of the discriminator
+           * value to write into discriminator field.
+           */
+          const database = relatedModel.database();
 
-        return null;
+          const model = Utils.modelFor(database, type);
+          const baseType = model.baseEntity;
+
+          const record = {[relatedLocalKey]: id};
+
+          if (baseType) {
+            const baseModel = Utils.modelFor(database, baseType);
+
+            for (const [discriminator, mappedModel] of Object.entries(baseModel.types())) {
+              if (type === mappedModel.entity) {
+                record[baseModel.typeKey || 'type'] = discriminator;
+                break;
+              }
+            }
+          }
+
+          return record;
+        }
       } else {
         return {[relatedLocalKey]: id};
       }

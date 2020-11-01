@@ -62,7 +62,7 @@ describe('Feature - STI Relations', () => {
         },
       },
       included: [
-        {id: 1, type: 'people', attributes: {type: 'adults', name: 'Alice'}},
+        {id: 1, type: 'people', attributes: {type: 'Adult', name: 'Alice'}},
         {id: 2, type: 'people', attributes: {type: null, name: 'Bob'}},
         {id: 3, type: 'children', attributes: {name: 'Harry'}},
       ],
@@ -72,36 +72,55 @@ describe('Feature - STI Relations', () => {
 
     assertState(store, {
       meetings: {
-        '1': {
-          '$id': '1',
-          chairperson: null,
-          id: 1,
-          participant_ids: [1, 2, 3],
-          participants: [],
-        },
+        1: {$id: '1', id: 1, chairperson: null, participant_ids: [1, 2, 3], participants: []},
       },
       people: {
-        '1': {
-          '$id': '1',
-          houses: [],
+        1: {$id: '1', id: 1, type: 'Adult', name: 'Alice', offices: [], houses: []},
+        2: {$id: '2', id: 2, type: null, name: 'Bob'},
+        3: {$id: '3', id: 3, type: 'Child', name: 'Harry', toys: [], monster_in_the_closet: null},
+      },
+    });
+  });
+
+  it('preserves STI subtypes when pivot models are involved', async () => {
+    const store = createStore(ModelFactory.presets);
+    const {offices: Office} = store.$db().models();
+
+    mock.onGet('/api/offices').reply(200, {
+      data: [
+        {
           id: 1,
-          name: 'Alice',
-          offices: [],
-          type: 'adults',
+          type: 'offices',
+          attributes: {
+            name: 'Newell Simon Hall',
+          },
+          relationships: {
+            people: {
+              data: [
+                {id: 1, type: 'adults'},
+              ],
+            },
+          },
         },
-        '2': {
-          '$id': '2',
-          id: 2,
-          name: 'Bob',
-          type: null,
-        },
-        '3': {
-          '$id': '3',
-          id: 3,
-          monster_in_the_closet: null,
-          name: 'Harry',
-          toys: [],
-          type: 'children',
+      ],
+      included: [
+        {id: 1, type: 'adults', attributes: {name: 'Allen Newell'}},
+      ],
+    });
+
+    await Office.jsonApi().index();
+
+    assertState(store, {
+      people: {
+        1: {$id: '1', id: 1, type: 'Adult', name: 'Allen Newell', houses: [], offices: []},
+      },
+      offices: {
+        1: {$id: '1', id: 1, people: [], name: 'Newell Simon Hall'},
+      },
+      inhabitables: {
+        '1_1_offices': {
+          $id: '1_1_offices', id: null, inhabitable_id: 1, inhabitable_type: 'offices', person_id: 1,
+          inhabitable: null, person: null,
         },
       },
     });

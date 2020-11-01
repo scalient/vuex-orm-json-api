@@ -5,8 +5,8 @@ export default class {
 
       types() {
         return {
-          adults,
-          children,
+          Adult: adults,
+          Child: children,
         };
       },
 

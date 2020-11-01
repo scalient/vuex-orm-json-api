@@ -72,6 +72,14 @@ module.exports = {
       'error',
       'unix',
     ],
+    /*
+     * This is a multiline starred block comment. This is a multiline starred block comment. This is a multiline starred
+     * block comment. This is a multiline starred block comment. This is a multiline starred block comment. This is a...
+     */
+    'multiline-comment-style': [
+      'error',
+      'starred-block',
+    ],
     /* Helps the user identify stray `console.log`s. */
     'no-console': [
       'error',
@@ -94,7 +102,10 @@ module.exports = {
     /* Disallows unused variables. */
     'no-unused-vars': [
       'error',
-      {argsIgnorePattern: '^_'},
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+      },
     ],
     /*
      * Disallows spaces inside of curly braces for consistency.

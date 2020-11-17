@@ -74,7 +74,7 @@ export default class {
   async upsertTransformedResource(database, transformedResource) {
     let model = Utils.modelFor(database, transformedResource.type);
 
-    await model.insertOrUpdate({data: transformedResource.data});
+    return await model.insertOrUpdate({data: transformedResource.data});
   }
 
   /**
@@ -115,10 +115,10 @@ export default class {
    * Commits a JSON:API resource.
    */
   async commitResource(database, data, included, scope) {
-    await this.upsertTransformedResource(database, data);
-
     await Promise.all(
-      included.map((transformedResource) => this.upsertTransformedResource(database, transformedResource)),
+      Array(data).
+        concat(included).
+        map((transformedResource) => this.upsertTransformedResource(database, transformedResource)),
     );
 
     return this.findRecordFromResource(database, data, scope);

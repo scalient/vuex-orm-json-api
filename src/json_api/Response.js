@@ -19,19 +19,19 @@ export default class {
     let database = this.model.database();
     let responseData = this.response.data;
 
-    let data = null;
-    let included = null;
+    let insertionStore = null;
+    let primaryData = responseData && responseData.data;
 
-    if (responseData && responseData.data) {
-      ({data, included} = this.documentTransformer.transform(responseData));
+    if (primaryData) {
+      insertionStore = this.documentTransformer.transform(responseData);
     }
 
     let multiplicity = this.config.multiplicity;
 
     if (!multiplicity) {
-      if (data instanceof Array) {
+      if (primaryData instanceof Array) {
         multiplicity = 'many';
-      } else if (data) {
+      } else if (primaryData) {
         multiplicity = 'one';
       } else {
         multiplicity = 'none';
@@ -42,19 +42,19 @@ export default class {
 
     switch (multiplicity) {
       case 'many':
-        if (!(data instanceof Array) || !data) {
+        if (!(primaryData instanceof Array) || !primaryData) {
           throw Utils.error('Expected an array JSON:API response, but got an object or nothing instead');
         }
 
-        return await this.commitResources(database, data, included, scope);
+        return await this.commitResources(database, primaryData, insertionStore, scope);
       case 'one':
-        if (data instanceof Array || !data) {
+        if (primaryData instanceof Array || !primaryData) {
           throw Utils.error('Expected an object JSON:API response, but got an array or nothing instead');
         }
 
-        return await this.commitResource(database, data, included, scope);
+        return await this.commitResource(database, primaryData, insertionStore, scope);
       case 'none':
-        if (data) {
+        if (primaryData) {
           throw Utils.error('Expected nothing for the JSON:API response\'s primary data, but got something instead');
         }
 
@@ -69,26 +69,20 @@ export default class {
   }
 
   /**
-   * Upserts a Vuex ORM-ready JSON:API resource.
-   */
-  async upsertTransformedResource(database, transformedResource) {
-    let model = Utils.modelFor(database, transformedResource.type);
-
-    return await model.insertOrUpdate({data: transformedResource.data});
-  }
-
-  /**
    * Finds the newly upserted record from the given resource.
    */
-  findRecordFromResource(database, transformedResource, scope) {
-    let model = Utils.modelFor(database, transformedResource.type);
+  findRecordFromResource(database, jsonApiResource, insertionStore, scope) {
+    let entity = this.documentTransformer.resourceToEntityCase(jsonApiResource.type);
+    let record = insertionStore.findRecord(entity, jsonApiResource.id);
+
+    let model = Utils.modelFor(database, entity);
     let primaryKey = model.primaryKey;
     let primaryKeyValue;
 
     if (!(primaryKey instanceof Array)) {
-      primaryKeyValue = transformedResource.data[primaryKey];
+      primaryKeyValue = record[primaryKey];
     } else {
-      primaryKeyValue = primaryKey.map((keyComponent) => transformedResource[keyComponent]);
+      primaryKeyValue = primaryKey.map((keyComponent) => record[keyComponent]);
     }
 
     let query = model.query().whereId(primaryKeyValue);
@@ -103,25 +97,31 @@ export default class {
   /**
    * Commits multiple JSON:API resources.
    */
-  async commitResources(database, data, included, scope) {
-    await Promise.all(
-      data.concat(included).map((transformedResource) => this.upsertTransformedResource(database, transformedResource)),
+  async commitResources(database, primaryData, insertionStore, scope) {
+    const promises = Array();
+
+    insertionStore.forEachType((entity, idsToRecords) =>
+      promises.push(Utils.modelFor(database, entity).insertOrUpdate({data: Object.values(idsToRecords)}))
     );
 
-    return data.map((data) => this.findRecordFromResource(database, data, scope));
+    await Promise.all(promises);
+
+    return primaryData.map((data) => this.findRecordFromResource(database, data, insertionStore, scope));
   }
 
   /**
    * Commits a JSON:API resource.
    */
-  async commitResource(database, data, included, scope) {
-    await Promise.all(
-      Array(data).
-        concat(included).
-        map((transformedResource) => this.upsertTransformedResource(database, transformedResource)),
+  async commitResource(database, primaryData, insertionStore, scope) {
+    const promises = Array();
+
+    insertionStore.forEachType((entity, idsToRecords) =>
+      promises.push(Utils.modelFor(database, entity).insertOrUpdate({data: Object.values(idsToRecords)}))
     );
 
-    return this.findRecordFromResource(database, data, scope);
+    await Promise.all(promises);
+
+    return this.findRecordFromResource(database, primaryData, insertionStore, scope);
   }
 
   /**

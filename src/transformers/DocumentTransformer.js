@@ -12,36 +12,18 @@ export default class {
     let primaryData = data.data;
 
     if (primaryData instanceof Array) {
-      primaryData.forEach((data) => this.transformResource(data, insertionStore, true));
+      primaryData.forEach((data) => this.transformResource(data, insertionStore));
     } else {
-      this.transformResource(primaryData, insertionStore, true);
+      this.transformResource(primaryData, insertionStore);
     }
 
     let includedData = data.included || [];
-    includedData.forEach((data) => this.transformResource(data, insertionStore, false));
+    includedData.forEach((data) => this.transformResource(data, insertionStore));
 
-    let records = insertionStore.toArray();
-
-    if (primaryData instanceof Array) {
-      return {
-        data: records.filter((record) => record.isPrimary),
-        included: records.filter((record) => !record.isPrimary),
-      };
-    } else {
-      let primaryRecords = records.filter((record) => record.isPrimary);
-
-      if (primaryRecords.length !== 1) {
-        throw Utils.error('Expected singleton array for pre-insertion records');
-      }
-
-      return {
-        data: primaryRecords[0],
-        included: records.filter((record) => !record.isPrimary),
-      };
-    }
+    return insertionStore;
   }
 
-  transformResource(data, insertionStore, isPrimary) {
+  transformResource(data, insertionStore) {
     // Convert JSON:API casing to Vuex ORM casing and look up the model.
     let type = this.resourceToEntityCase(data.type);
     let model = Utils.modelFor(this.database, type);
@@ -49,12 +31,6 @@ export default class {
     let localKey = model.localKey();
     let record = insertionStore.fetchRecord(type, resourceId, localKey);
 
-    /*
-     * This record may have started life as non-primary, and the `DocumentTransformer` has the authoritative say on
-     * whether it is primary.
-     */
-    record.isPrimary = isPrimary;
-
-    model.jsonApiTransformer.transform(data, record.data, insertionStore);
+    model.jsonApiTransformer.transform(data, record, insertionStore);
   }
 }

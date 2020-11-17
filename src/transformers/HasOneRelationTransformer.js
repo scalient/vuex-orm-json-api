@@ -32,14 +32,13 @@ export default class extends RelationTransformer {
        * JSON:API resources.
        */
       let record = insertionStore.fetchRecord(type, id, relatedLocalKey);
-      let data = record.data;
 
       // Fill in the inverse side of this relation.
       if (!this.isPolymorphic) {
-        data[this.relation.foreignKey] = selfId;
+        record[this.relation.foreignKey] = selfId;
       } else {
-        data[this.relation.id] = selfId;
-        data[this.relation.type] = this.relation.model.entity;
+        record[this.relation.id] = selfId;
+        record[this.relation.type] = this.relation.model.entity;
       }
     } else {
       output[this.name] = {[relatedLocalKey]: id};

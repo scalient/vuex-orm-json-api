@@ -55,8 +55,8 @@ Some considerations:
     ```
     await User.jsonApi().show(1, {scope: (query) => query.with('users.group')});
     ```
-
-    Additional overridable options include `url` and `method`.
+*   Additional options beyond the required action parameters will be pass through to the underlying
+    [axios request](https://axios-http.com/docs/api_intro). Potential configurations include `url` and `method`.
 
 ---
 

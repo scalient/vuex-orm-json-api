@@ -34,19 +34,19 @@
     "@vuex-orm/core": ">=0.36.0"
   },
   "dependencies": {
-    "axios": "latest"
+    "axios": "^0.21.1"
   },
   "devDependencies": {
-    "@babel/core": "latest",
-    "@babel/plugin-transform-runtime": "latest",
-    "@babel/preset-env": "latest",
+    "@babel/core": "^7.14.6",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.5",
     "@vuex-orm/core": ">=0.36.0",
-    "axios-mock-adapter": "latest",
+    "axios-mock-adapter": "^1.19.0",
     "babel-eslint": "latest",
-    "eslint": "latest",
-    "jest": "latest",
-    "vue": "latest",
-    "vuex": "latest",
-    "webpack": "latest"
+    "eslint": "^7.28.0",
+    "jest": "^27.0.4",
+    "vue": "^2.6.14",
+    "vuex": "^3.6.2",
+    "webpack": "^5.39.0"
   }
 }

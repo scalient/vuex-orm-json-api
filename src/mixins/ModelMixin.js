@@ -35,6 +35,8 @@ export default class {
 
         return this.cachedTransformer;
       },
+      // Allow HMR to succeed with a module reload.
+      configurable: true,
     });
 
     // The JSON:API adapter.

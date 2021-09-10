@@ -1,3 +1,8 @@
+### 0.9.8 (2021-09-10)
+
+- Make the library more HMR friendly.
+- Clarify configuration of REST actions' underlying axios object.
+
 ### 0.9.7 (2020-11-01)
 
 - Handle STI correctly when pivot models are involved in `BelongsToMany`, `MorphByMany`, and `MorphToMany` relations.

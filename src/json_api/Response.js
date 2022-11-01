@@ -10,17 +10,29 @@ export default class {
     this.response = response;
     this.config = config;
     this.documentTransformer = new DocumentTransformer(model.database(), config);
+
+    let responseData = this.response?.data;
+
+    if (responseData) {
+      (
+        {
+          meta: this.meta,
+          jsonapi: this.jsonapi,
+          links: this.links,
+        } = responseData
+      );
+    }
   }
 
   /**
-   * Commit response data to the store, returning.
+   * Commit response data to the store, potentially returning newly inserted records.
    */
   async commit() {
     let database = this.model.database();
-    let responseData = this.response.data;
+    let responseData = this.response?.data;
 
     let insertionStore = null;
-    let primaryData = responseData && responseData.data;
+    let primaryData = responseData?.data;
 
     if (primaryData) {
       insertionStore = this.documentTransformer.transform(responseData);

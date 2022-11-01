@@ -58,4 +58,21 @@ describe('Feature - Requests', () => {
       Utils.error('Couldn\'t find the model for entity type `things`'),
     );
   });
+
+  it('exposes top-level JSON:API properties like `meta` through `rawRequest`', async () => {
+    const store = createStore(ModelFactory.presets);
+    const {users: User} = store.$db().models();
+
+    mock.onGet('/api/users/1').reply(200, {
+      data: {
+        id: 1,
+        type: 'users',
+      },
+      meta: {
+        count: 1,
+      },
+    });
+
+    expect((await User.jsonApi().rawRequest({method: 'get', url: '/api/users/1'})).meta.count).toEqual(1);
+  });
 });

@@ -25,8 +25,6 @@ export default class {
    */
   get(url, config = {}) {
     return this.request({
-      ...this.model.globalJsonApiConfig,
-      ...this.model.jsonApiConfig,
       method: 'get', url,
       ...config,
     });
@@ -37,8 +35,6 @@ export default class {
    */
   post(url, data = {}, config = {}) {
     return this.request({
-      ...this.model.globalJsonApiConfig,
-      ...this.model.jsonApiConfig,
       method: 'post', url, data,
       ...config,
     });
@@ -49,8 +45,6 @@ export default class {
    */
   put(url, data = {}, config = {}) {
     return this.request({
-      ...this.model.globalJsonApiConfig,
-      ...this.model.jsonApiConfig,
       method: 'put', url, data,
       ...config,
     });
@@ -61,8 +55,6 @@ export default class {
    */
   patch(url, data = {}, config = {}) {
     return this.request({
-      ...this.model.globalJsonApiConfig,
-      ...this.model.jsonApiConfig,
       method: 'patch', url, data,
       ...config,
     });
@@ -73,8 +65,6 @@ export default class {
    */
   delete(url, config = {}) {
     return this.request({
-      ...this.model.globalJsonApiConfig,
-      ...this.model.jsonApiConfig,
       method: 'delete', url,
       ...config,
     });
@@ -84,6 +74,20 @@ export default class {
    * Performs an API request: Awaits an axios request, gets the axios response, and awaits the database commit.
    */
   async request(config) {
-    return await new Response(this.model, await this.axios.request(config), config).commit();
+    return await (await this.rawRequest(config)).commit();
+  }
+
+  /**
+   * Performs an API request: Awaits an axios request, gets the axios response, does not make a database commit, and
+   * returns the original response object for inspection of stuff like JSON:API `meta`.
+   */
+  async rawRequest(config) {
+    const axiosConfig = {
+      ...this.model.globalJsonApiConfig,
+      ...this.model.jsonApiConfig,
+      ...config,
+    };
+
+    return new Response(this.model, await this.axios.request(axiosConfig), axiosConfig);
   }
 }

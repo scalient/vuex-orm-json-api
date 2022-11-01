@@ -1,3 +1,7 @@
+### 0.9.9 (2022-11-01)
+
+- Add the `rawRequest` API.
+
 ### 0.9.8 (2021-09-10)
 
 - Make the library more HMR friendly.

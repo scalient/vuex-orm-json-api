@@ -43,20 +43,29 @@ User.jsonApi().destroy(1);                          // Destroy user 1.
 
 Some considerations:
 
-*   Because JSON:API documents are divided into **primary data** (`data: {}` or `data: []`) and **related resources**
-    (`included: []`), all actions come with the side effect of upserting received resources, via `Model.insertOrUpdate`,
-    into the Vuex ORM database (or deleting in case of `destroy`).
-*   The return value of each action is the upserted record(s) corresponding to the primary data section, with proper
-    multiplicity: `Array` for `index`; `Object` for `show`, `create`, and `update`; and `null` for `destroy`.
-*  `index`, `show`, `create`, `update`, and `destroy` respectively use the `GET`, `GET`, `POST`, `PATCH`, and `DELETE`
-    HTTP methods. The JSON:API specification seems to prefer `PATCH` over `PUT`.
-*   You may pass in a `scope` function to qualify returned records further. For example:
+* Because JSON:API documents are divided into **primary data** (`data: {}` or `data: []`) and **related resources**
+  (`included: []`), all actions come with the side effect of upserting received resources, via `Model.insertOrUpdate`,
+  into the Vuex ORM database (or deleting in case of `destroy`).
+* The return value of each action is the upserted record(s) corresponding to the primary data section, with proper
+  multiplicity: `Array` for `index`; `Object` for `show`, `create`, and `update`; and `null` for `destroy`.
+* `index`, `show`, `create`, `update`, and `destroy` respectively use the `GET`, `GET`, `POST`, `PATCH`, and `DELETE`
+  HTTP methods. The JSON:API specification seems to prefer `PATCH` over `PUT`.
+* You may pass in a `scope` function to qualify returned records further. For example:
 
-    ```
-    await User.jsonApi().show(1, {scope: (query) => query.with('users.group')});
-    ```
-*   Additional options beyond the required action parameters will be pass through to the underlying
-    [axios request](https://axios-http.com/docs/api_intro). Potential configurations include `url` and `method`.
+  ```
+  await User.jsonApi().show(1, {scope: (query) => query.with('users.group')});
+  ```
+* Additional options beyond the required action parameters will be pass through to the underlying
+  [axios request](https://axios-http.com/docs/api_intro). Potential configurations include `url` and `method`.
+* If you want to dig into JSON:API top-level properties like `meta` and `links` (see
+  https://jsonapi.org/format/#document-top-level), use the `rawRequest` API like so:
+
+  ```
+  const vuexOrmJsonApiResponse = await User.jsonApi().rawRequest({method: 'get', url: '/api/users/1'});
+  const theMeta = vuexOrmJsonApiResponse.meta;
+  // Commit to the database.
+  await vuexOrmJsonApiResponse.commit();
+  ```
 
 ---
 

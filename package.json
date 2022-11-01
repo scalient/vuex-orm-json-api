@@ -1,6 +1,6 @@
 {
   "name": "vuex-orm-json-api",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "A JSON:API adapter for Vuex ORM.",
   "module": "src/index.js",
   "scripts": {

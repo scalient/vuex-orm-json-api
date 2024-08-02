@@ -11,7 +11,7 @@ export default class {
     this.config = config;
     this.documentTransformer = new DocumentTransformer(model.database(), config);
 
-    let responseData = this.response?.data;
+    let responseData = this.response.data;
 
     if (responseData) {
       (
@@ -29,7 +29,7 @@ export default class {
    */
   async commit() {
     let database = this.model.database();
-    let responseData = this.response?.data;
+    let responseData = this.response.data;
 
     let insertionStore = null;
     let primaryData = responseData?.data;

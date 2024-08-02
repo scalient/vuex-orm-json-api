@@ -25,11 +25,9 @@ describe('Feature - Requests', () => {
       user: {},
     };
 
-    const response = {
-      errors: [
-        {id: 1, detail: 'Validation failed: Name can\'t be blank'},
-      ],
-    };
+    const responseErrors = [
+      {id: 1, detail: 'Validation failed: Name can\'t be blank'},
+    ];
 
     mock.onPost('/api/users', payload).reply(422, response);
 
@@ -37,9 +35,11 @@ describe('Feature - Requests', () => {
 
     try {
       await User.jsonApi().create(payload);
-    } catch (axiosError) {
-      expect(axiosError.response.status).toBe(422);
-      expect(axiosError.response.data).toEqual(response);
+    } catch (jsonApiError) {
+      // This is the Axios error's status.
+      expect(jsonApiError.cause.response.status).toBe(422);
+      // This is the `JsonApiError`'s own response.
+      expect(jsonApiError.response.errors).toEqual(responseErrors);
     }
   });
 

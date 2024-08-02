@@ -1,5 +1,6 @@
 import Utils from '../Utils';
 import Response from './Response';
+import JsonApiError from '../JsonApiError';
 
 export default class {
   /**
@@ -88,6 +89,10 @@ export default class {
       ...config,
     };
 
-    return new Response(this.model, await this.axios.request(axiosConfig), axiosConfig);
+    try {
+      return new Response(this.model, await this.axios.request(axiosConfig), axiosConfig);
+    } catch (axiosError) {
+      throw new JsonApiError(axiosError, new Response(this.model, axiosError.response, axiosConfig));
+    }
   }
 }

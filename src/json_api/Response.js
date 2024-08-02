@@ -19,6 +19,7 @@ export default class {
           meta: this.meta,
           jsonapi: this.jsonapi,
           links: this.links,
+          errors: this.errors,
         } = responseData
       );
     }
